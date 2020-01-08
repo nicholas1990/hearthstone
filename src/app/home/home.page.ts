@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
     
     window.addEventListener("orientationchange", function(){
       console.log(screen.orientation.type); // e.g. portrait
-  });
+    });
   }
 
   async presentLoading() {
