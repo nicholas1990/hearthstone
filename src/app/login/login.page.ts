@@ -23,18 +23,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
   getAuthorization(){
-    let url="https://eu.battle.net/oauth/authorize"
-    console.log(url)
-
-    let params = new HttpParams();
-    params = params.append('response_type', 'code');
-    params = params.append('client_id', 'f901e9aa49944a8db7de799555203c02');
-    params = params.append('redirect_uri', 'https://develop.battle.net/');
-
-    this.http.get(url,{params:params}).subscribe(
-      tap(console.log)
-    )
-
+    
   }
 
 }

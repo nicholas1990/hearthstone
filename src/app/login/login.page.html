@@ -24,10 +24,12 @@
         </ion-item>
         <ion-note *ngIf="loginForm.get('password').errors?.required && (loginForm.get('password').dirty || loginForm.get('password').touched)" color="danger">Inserisci Email</ion-note>
       </form>
-      <ion-button  class="ion-margin-top" color="queen-blue" size="small" expand="block" (click)="getAuthorization()">
+      <ion-button  class="ion-margin-top" color="queen-blue" size="small" expand="block" >
         Login
       </ion-button>
-    </ion-card-content>
+      <ion-button  class="ion-margin-top" color="queen-blue" size="small" expand="block" >
+        <a style="color: #fff;" href="https://eu.battle.net/oauth/authorize?response_type=code&client_id=f901e9aa49944a8db7de799555203c02&redirect_uri=http://localhost:8100" class="href">Accedi con battle.net</a>
+      </ion-button>    </ion-card-content>
   </ion-card>
 
 
