@@ -1,0 +1,35 @@
+<ion-content color="bg-primary">
+
+
+  <ion-card color="white">
+    <ion-card-header>
+      <ion-img
+        src="https://upload.wikimedia.org/wikipedia/it/thumb/1/1c/Hearthstone_Logo.png/260px-Hearthstone_Logo.png">
+      </ion-img>
+
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-card-title color="queen-blue" class="color-true-queen-blue">Effettua il login</ion-card-title>
+      <form [formGroup]="loginForm">
+        <ion-item>
+          <ion-label color="queen-blue"  position="floating">Email</ion-label>
+          <ion-input formControlName="email" debounce="600" required></ion-input>
+        </ion-item>
+        <ion-note *ngIf="loginForm.get('email').errors?.required && (loginForm.get('email').dirty || loginForm.get('email').touched)" color="danger">Inserisci Email</ion-note>
+        <ion-note *ngIf="loginForm.get('email').invalid && (loginForm.get('email').dirty || loginForm.get('email').touched)" color="danger">L'Email non è valida</ion-note>
+        <ion-item>
+          <ion-label color="queen-blue"  position="floating">Password</ion-label>
+          <ion-input type="password" formControlName="password"  debounce="600" required></ion-input>
+        </ion-item>
+        <ion-note *ngIf="loginForm.get('password').errors?.required && (loginForm.get('password').dirty || loginForm.get('password').touched)" color="danger">Inserisci Email</ion-note>
+      </form>
+      <ion-button  class="ion-margin-top" color="queen-blue" size="small" expand="block" (click)="getAuthorization()">
+        Login
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+
+</ion-content>
