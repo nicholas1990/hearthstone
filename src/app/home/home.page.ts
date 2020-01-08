@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -7,8 +6,7 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 })
 export class HomePage {
 
-  constructor(private screenOrientation: ScreenOrientation) {
-    console.log(this.screenOrientation.type);
+  constructor() {
   }
 
 }
