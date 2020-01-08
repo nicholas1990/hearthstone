@@ -7,9 +7,9 @@ import { Component } from '@angular/core';
 export class HomePage {
 
   constructor() {
-    window.addEventListener("orientationchange", function(){
+    window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
-  });
+    });
   }
 
 }
