@@ -47,6 +47,7 @@ export class HomePage implements OnInit {
       this.http.post(this.tokenUrl, null, {params, headers}).subscribe(
         data  => {
           console.log('POST Request is successful ', data);
+          debugger;
           this.loadingController.dismiss();
         },
         error  => {
