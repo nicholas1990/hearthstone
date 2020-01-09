@@ -42,9 +42,9 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.presentLoading();
 
-    this.activatedRoute.queryParams.subscribe((parameter:Authorization) => {
+    this.activatedRoute.queryParams.subscribe((parameter: Authorization) => {
       const params = new HttpParams()
-      .append('code', parameter['code'])
+      .append('code', parameter.code)
       .append('grant_type', 'authorization_code')
       .append('redirect_uri', environment.redirect_uri)
 
