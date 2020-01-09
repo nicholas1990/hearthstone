@@ -9,8 +9,8 @@ export const environment = {
   secret_id:'3ndOs1oX3VHBx8NbFPo7IKsGbG7tWm1D',
   redirect_uri: 'http://localhost:8100',
   authorize_url:'https://eu.battle.net/oauth/authorize',
-  token_url:'https://eu.battle.net/oauth/token'
-  
+  token_url:'https://eu.battle.net/oauth/token',
+  hearthstone:'https://us.api.blizzard.com/hearthstone/'
 };
 
 
