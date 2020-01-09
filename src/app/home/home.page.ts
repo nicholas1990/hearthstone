@@ -13,9 +13,9 @@ import { LoadingController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
-  access_code: string = 'aaa'
+  access_code: string;
 
-  tokenUrl="https://eu.battle.net/oauth/token"
+  tokenUrl=environment.token_url
 
   constructor(private activatedRoute: ActivatedRoute,private http: HttpClient,
     public loadingController: LoadingController) {
