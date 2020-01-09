@@ -1,3 +1,5 @@
+
+import { environment } from './../../environments/environment';
 import { tap } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -11,13 +13,14 @@ import { LoadingController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
-  access_code: string
+  access_code: string = 'aaa'
 
   tokenUrl="https://eu.battle.net/oauth/token"
 
   constructor(private activatedRoute: ActivatedRoute,private http: HttpClient,
     public loadingController: LoadingController) {
-   
+      
+      //screen.orientation.lock('landscape')
     
     window.addEventListener("orientationchange", function(){
       console.log(screen.orientation.type); // e.g. portrait
@@ -26,7 +29,7 @@ export class HomePage implements OnInit {
 
   async presentLoading() {
     const loading = await this.loadingController.create({
-      message: 'Hellooo',
+      message: 'Autenticazione in corso',
       
     });
     await loading.present();
@@ -35,16 +38,7 @@ export class HomePage implements OnInit {
 
     console.log('Loading dismissed!');
   }
-  async presentLoadingWithOptions() {
-    const loading = await this.loadingController.create({
-      spinner: null,
-      duration: 5000,
-      message: 'Please wait...',
-      translucent: true,
-      cssClass: 'custom-class custom-loading'
-    });
-    return await loading.present();
-  }
+
 
   
 
@@ -59,10 +53,10 @@ export class HomePage implements OnInit {
       const params = new HttpParams()
       .append('code',parameter['code'])
       .append('grant_type','authorization_code')
-      .append('redirect_uri','http://localhost:8100')
+      .append('redirect_uri',environment.redirect_uri)
       
       const headers = new HttpHeaders()
-      .append("Authorization", "Basic " + btoa("f901e9aa49944a8db7de799555203c02:3ndOs1oX3VHBx8NbFPo7IKsGbG7tWm1D"))
+      .append("Authorization", "Basic " + btoa(environment.client_id+":"+environment.secret_id))
       .append("Content-Type", "application/x-www-form-urlencoded")
 
      
