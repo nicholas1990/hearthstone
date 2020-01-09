@@ -12,9 +12,9 @@ import { LoadingController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
-  accessCode: string;
+  access_code: string;
 
-  tokenUrl = 'https://eu.battle.net/oauth/token';
+  tokenUrl: string = environment.token_url;
 
   constructor(private activatedRoute: ActivatedRoute, private http: HttpClient, public loadingController: LoadingController) {
     window.addEventListener('orientationchange', () => {
