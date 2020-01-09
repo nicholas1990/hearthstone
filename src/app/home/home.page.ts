@@ -1,4 +1,3 @@
-import { tap } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -49,11 +48,10 @@ export class HomePage implements OnInit {
           this.loadingController.dismiss();
         },
         error  => {
-          console.log("Error", error);
+          console.dir("Error", error);
         }
       );
-    }
-  );
+    });
 
   }
 
