@@ -6,7 +6,11 @@ export const environment = {
   production: false,
   // response_type: 'code',
   client_id: 'f901e9aa49944a8db7de799555203c02',
-  // redirect_uri: 'http://localhost:8100',
+  secret_id:'3ndOs1oX3VHBx8NbFPo7IKsGbG7tWm1D',
+  redirect_uri: 'http://localhost:8100',
+  authorize_url:'https://eu.battle.net/oauth/authorize',
+  token_url:'https://eu.battle.net/oauth/token'
+  
 };
 
 /*

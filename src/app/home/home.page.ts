@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+
+import { environment } from './../../environments/environment';
+import { tap } from 'rxjs/operators';
+>>>>>>> c68833c33b96f3799651d99535f47710c5c4c217
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +16,7 @@ import { LoadingController } from '@ionic/angular';
 })
 export class HomePage implements OnInit {
 
-  access_code: string;
+  accessCode: string;
 
   tokenUrl = 'https://eu.battle.net/oauth/token';
 
@@ -48,7 +54,7 @@ export class HomePage implements OnInit {
           this.loadingController.dismiss();
         },
         error  => {
-          console.dir("Error", error);
+          console.dir('Error', error);
         }
       );
     });

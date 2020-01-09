@@ -1,3 +1,4 @@
+
 import { environment } from './../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -24,9 +25,9 @@ export class LoginPage {
   ionViewDidEnter(): void {
 
     const getLoginUrl = (): string => {
-      const url = `https://eu.battle.net/oauth/authorize`;
+      const url = environment.authorize_url;
       const responsetype = `code`;
-      const redirectURL = `http://localhost:8100`;
+      const redirectURL = environment.redirect_uri;
       return `${url}?response_type=${responsetype}&client_id=${environment.client_id}&redirect_uri=${redirectURL}`;
     };
 
