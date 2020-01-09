@@ -15,7 +15,7 @@ import { Storage } from '@ionic/storage';
 
 export class HomePage implements OnInit {
 
-  access_code: string;
+  access_code;
 
   
 
