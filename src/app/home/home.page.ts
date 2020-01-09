@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-=======
-
 import { environment } from './../../environments/environment';
 import { tap } from 'rxjs/operators';
->>>>>>> c68833c33b96f3799651d99535f47710c5c4c217
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
