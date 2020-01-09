@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-
+import { Storage } from '@ionic/storage';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,17 +14,21 @@ export class HomePage implements OnInit {
 
   access_code: string;
 
-  tokenUrl: string = environment.token_url;
+  //tokenUrl: string = environment.token_url;
 
-  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient, public loadingController: LoadingController) {
+  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient,
+     public loadingController: LoadingController,
+     private storage: Storage) {
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
+
+    
   }
 
   async presentLoading() {
     const loading = await this.loadingController.create({
-      message: 'Hellooo',
+      message: 'Accesso in corso',
     });
     return await loading.present();
     // const { role, data } = await loading.onDidDismiss();
@@ -34,19 +38,21 @@ export class HomePage implements OnInit {
     this.presentLoading();
 
     this.activatedRoute.queryParams.subscribe(parameter => {
+        console.log(parameter['code'])
+      const params = new HttpParams()
+      .append('code', parameter['code'])
+      .append('grant_type', 'authorization_code')
+      .append('redirect_uri', environment.redirect_uri)
+      console.log(params)
 
-      const params = new HttpParams();
-      params.append('code', parameter['code']);
-      params.append('grant_type', 'authorization_code');
-      params.append('redirect_uri', 'http://localhost:8100');
+      const headers = new HttpHeaders()
+      .append('Authorization', 'Basic ' + btoa(environment.client_id+':'+environment.secret_id))
+      .append('Content-Type', 'application/x-www-form-urlencoded');
 
-      const headers = new HttpHeaders();
-      headers.append('Authorization', 'Basic ' + btoa('f901e9aa49944a8db7de799555203c02:3ndOs1oX3VHBx8NbFPo7IKsGbG7tWm1D'));
-      headers.append('Content-Type', 'application/x-www-form-urlencoded');
-
-      this.http.post(this.tokenUrl, null, {params, headers}).subscribe(
+      this.http.post(environment.token_url,null,{params, headers}).subscribe(
         data  => {
           console.log('POST Request is successful ', data);
+          console.log(data['access_token']);
           this.loadingController.dismiss();
         },
         error  => {
