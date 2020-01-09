@@ -52,11 +52,6 @@ export class HomePage implements OnInit {
       this.http.post(environment.token_url,null,{params, headers}).subscribe(
         data  => {
           console.log('POST Request is successful ', data);
-<<<<<<< HEAD
-          debugger;
-=======
-          console.log(data['access_token']);
->>>>>>> b2fd510b0b18e343fb1f6765b6c143771436ad43
           this.loadingController.dismiss();
         },
         error  => {
