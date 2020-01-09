@@ -15,10 +15,10 @@ export class LoginPage {
   loginForm: FormGroup;
   loginURL: string;
 
-  constructor(private fb:FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.loginForm = fb.group({
-      email: ['',[Validators.required,Validators.email]],
-      password:['',[Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     });
   }
 
