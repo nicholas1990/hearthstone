@@ -24,3 +24,28 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.p-relative{
+    position: relative;
+}
+.p-absolute{
+    position: absolute;
+}
+.custom-mana-number{
+    top: 4px;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 2px 2px 2px #000;
+    left: 9px;
+}
+.custom-mana-button{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+

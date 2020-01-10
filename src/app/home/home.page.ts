@@ -1,3 +1,4 @@
+import { ApiHomeService } from './../services/home/api-home.service';
 import { Token, Authorization } from './../../models/home/home';
 
 import { environment} from './../../environments/environment';
@@ -16,6 +17,8 @@ import { Storage } from '@ionic/storage';
 export class HomePage implements OnInit {
 
   access_code;
+  mana: Array<number> = [0,1, 2, 3, 4,5,6,7,8,9,10]; 
+  
 
   
 
@@ -23,10 +26,14 @@ export class HomePage implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute, private http: HttpClient,
      public loadingController: LoadingController,
-     private storage: Storage) {
+     private storage: Storage, private homeService: ApiHomeService) {
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
+
+    homeService.getCards().subscribe(
+      tap(console.log)
+    )
 
     
   }
@@ -40,7 +47,9 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    this.presentLoading();
+    
+    
+    //this.presentLoading();
 
     this.activatedRoute.queryParams.subscribe((parameter: Authorization) => {
       const params = new HttpParams()
