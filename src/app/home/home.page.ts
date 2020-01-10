@@ -1,4 +1,3 @@
-import { ApiHomeService } from './../services/home/api-home.service';
 import { Token, Authorization } from './../../models/home/home';
 import { tap, switchMap, catchError, take } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
@@ -9,20 +8,20 @@ import { ApiHomeService } from '../services/home/api-home.service';
 import { HomeService } from '../services/home/home.service';
 import { Storage } from '@ionic/storage';
 
-import { environment} from './../../environments/environment';
 import { EMPTY, of } from 'rxjs';
-
+// import { LoadingControllerService } from '../core/services';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage {
 
   constructor(
     private activatedRoute: ActivatedRoute,
     public loadingController: LoadingController,
     private storage: Storage,
+    // private loadingControllerService: LoadingControllerService,
     private apiService: ApiHomeService,
     public service: HomeService) {
 
@@ -30,11 +29,6 @@ export class HomePage implements OnInit {
       console.log(screen.orientation.type); // e.g. portrait
     });
 
-    // homeService.getCards().subscribe(
-    //   tap(console.log)
-    // )
-
-    
   }
 
   async presentLoading() {
@@ -45,7 +39,7 @@ export class HomePage implements OnInit {
     // const { role, data } = await loading.onDidDismiss();
   }
 
-  ngOnInit() {
+  ionViewDidEnter(): void {
     const loading = this.loadingController.create({
       message: 'Accesso in corso',
     });
@@ -64,8 +58,9 @@ export class HomePage implements OnInit {
           return null;
         }),
       )),
-      tap(data => {
-        this.service.emitToken(data);
+      tap((data: Token) => {
+        // this.service.emitToken(data);
+        this.service.setStorageToken(data);
       }),
       tap(async () => {
         const loader = await loading;
