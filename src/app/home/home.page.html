@@ -1,19 +1,84 @@
 <ion-content color="bg-primary">
-  
-  <div class="ion-padding">
-    <app-input>
-      <ion-item>
-        <ion-input placeholder="Enter Input"></ion-input>
-      </ion-item>
-    </app-input>
-  </div>
 
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
 
-  <!-- <p *ngIf="access_token | async">{{access_token}}</p> -->
 
-{{ service.token$ | async | json }}
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="9">
+        <ion-card class="ion-no-margin" color="old-mauve">
+          <ion-card-header class="ion-no-padding">
+            <ion-list lines="full">
+              <ion-radio-group style="display: flex; padding: 0 10px;">
+
+
+                <ion-item class="mana-item" *ngFor="let m of mana">
+                  <ion-label class="p-relative ion-no-margin ion-no-padding">
+                    <ion-avatar class="ion-no-margin ion-no-padding">
+                      <img src="https://hsreplay.net/static/images/mana_crystal.png">
+                    </ion-avatar>
+                    <span class="p-absolute custom-mana-number">{{m}}</span>
+                    <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" slot="start" value="{{m}}"
+                      checked></ion-radio>
+                  </ion-label>
+
+                </ion-item>
+
+
+              </ion-radio-group>
+            </ion-list>
+          </ion-card-header>
+
+          <ion-card-content class="ion-no-padding">
+            <ion-card class="ion-no-margin" color="bg-secondary">
+
+              <ion-card-content class="ion-no-padding ion-no-margin">
+
+                <ion-list class="ion-no-padding ion-no-margin card-list" lines="none">
+                  <ion-item *ngFor="let m of mana; let i=index" class="no-lines">
+
+                    <ion-card *ngIf="i<10" class="ion-no-padding ion-no-margin ">
+                      <img src="../../assets/img/empty-card.png">
+                      <ion-text class="card-value mana">{{m}}</ion-text>
+                      <ion-text class="card-value attack">{{m}}</ion-text>
+                      <ion-text class="card-value health">{{m}}</ion-text>
+                    </ion-card>
+                  </ion-item>
+                </ion-list>
+
+
+
+
+              </ion-card-content>
+
+            </ion-card>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col size="3" column-padding>
+        <ion-card class="ion-no-margin" color="old-mauve">
+          <ion-card-header>
+            <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+          </ion-card-header>
+          <ion-list>
+            <ion-item lines="none">
+              <ion-label>
+                
+                  <ion-button class="new-deck-btn" color="button-secondary">
+                    <ion-icon name="add-circle-outline"></ion-icon>Nuovo Mazzo
+                </ion-button>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+
+
+
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>

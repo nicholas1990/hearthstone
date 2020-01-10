@@ -1,1 +1,88 @@
 
+.mana-item{
+    width: 13%;
+    background:none
+}
+
+.card-list{
+    display: -webkit-box;
+    display: flex;
+    justify-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: start;
+    margin: 10px 10px;
+    overflow: hidden;
+}
+.card-list ion-item{
+    flex: 0 0 20%;
+    padding: 4px;
+}
+.card-list ion-item ion-card .card-value{
+    position: absolute;
+    top: 0;
+    font-size: 14px;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000000;
+}
+.card-list ion-item ion-card .mana{
+    top: 8%;
+    left: 9%;
+
+}
+.card-list ion-item ion-card .attack{
+    top: 85%;
+    left: 11%;
+    font-size: 12px;
+
+}
+.card-list ion-item ion-card .health{
+    right: 9%;
+    top: 85%;
+    font-size: 12px;
+}
+.card-list ion-label{
+    display: inherit;
+}
+
+ion-radio-group > ion-item{
+    opacity: var(--ion-semi-opacity)
+}
+ion-radio-group .item-radio-checked{
+    opacity: var(--ion-full-opacity)
+    
+}
+ion-radio{
+    --color:transparent;
+    --color-checked: transparent;
+}
+ion-item{
+    --inner-padding-end: 0px;
+    --padding-start:0px;
+    --ion-background-color:none ;
+    
+}
+
+ion-list{
+    background:none
+}
+.mana-item:nth-last-child(1) .custom-mana-number{
+    left: 2px;
+}
+
+    ion-avatar{
+        width: 30px;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    }
+    ion-lable.c-padding{
+        margin: 0;
+        padding: 0;
+    }
+
+    .new-deck-btn{
+        width: 100%;
+        padding-left: 5px;
+    }
+

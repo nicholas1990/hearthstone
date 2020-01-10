@@ -1,3 +1,4 @@
+import { ApiHomeService } from './../services/home/api-home.service';
 import { Token, Authorization } from './../../models/home/home';
 import { tap, switchMap, catchError, take } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
@@ -29,6 +30,11 @@ export class HomePage implements OnInit {
       console.log(screen.orientation.type); // e.g. portrait
     });
 
+    // homeService.getCards().subscribe(
+    //   tap(console.log)
+    // )
+
+    
   }
 
   async presentLoading() {
