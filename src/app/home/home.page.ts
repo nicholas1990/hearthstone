@@ -1,39 +1,38 @@
 import { ApiHomeService } from './../services/home/api-home.service';
 import { Token, Authorization } from './../../models/home/home';
-
-import { environment} from './../../environments/environment';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap, catchError, take } from 'rxjs/operators';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { ApiHomeService } from '../services/home/api-home.service';
+import { HomeService } from '../services/home/home.service';
 import { Storage } from '@ionic/storage';
+
+import { environment} from './../../environments/environment';
+import { EMPTY, of } from 'rxjs';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-
 export class HomePage implements OnInit {
 
-  access_code;
-  mana: Array<number> = [0,1, 2, 3, 4,5,6,7,8,9,10]; 
-  
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    public loadingController: LoadingController,
+    private storage: Storage,
+    private apiService: ApiHomeService,
+    public service: HomeService) {
 
-  
-
-  //tokenUrl: string = environment.token_url;
-
-  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient,
-     public loadingController: LoadingController,
-     private storage: Storage, private homeService: ApiHomeService) {
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
 
-    homeService.getCards().subscribe(
-      tap(console.log)
-    )
+    // homeService.getCards().subscribe(
+    //   tap(console.log)
+    // )
 
     
   }
@@ -47,31 +46,38 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    
-    
-    //this.presentLoading();
-
-    this.activatedRoute.queryParams.subscribe((parameter: Authorization) => {
-      const params = new HttpParams()
-      .append('code', parameter.code)
-      .append('grant_type', 'authorization_code')
-      .append('redirect_uri', environment.redirect_uri)
-
-      const headers = new HttpHeaders()
-      .append('Authorization', 'Basic ' + btoa(environment.client_id+':'+environment.secret_id))
-      .append('Content-Type', 'application/x-www-form-urlencoded');
-
-      this.http.post<Object>(environment.token_url,null,{params, headers}).subscribe(
-        (data:Token) => {
-          console.log('POST Request is successful ', data);
-          this.storage.set('token',data.access_token );
-          this.loadingController.dismiss();
-        },
-        error  => {
-          console.dir('Error', error);
-        }
-      );
+    const loading = this.loadingController.create({
+      message: 'Accesso in corso',
     });
+
+    this.activatedRoute.queryParams.pipe(
+      take(1),
+      tap(async () => {
+        const loader = await loading;
+        loader.present();
+      }),
+      switchMap((parameters: Authorization) => this.apiService.authorization(parameters).pipe(
+        catchError(async error => {
+          const loader = await loading;
+          loader.dismiss();
+          console.dir(error);
+          return null;
+        }),
+      )),
+      tap(data => {
+        this.service.emitToken(data);
+      }),
+      tap(async () => {
+        const loader = await loading;
+        loader.dismiss();
+      }),
+      catchError(async error => {
+        const loader = await loading;
+        loader.dismiss();
+        console.dir(error);
+        return EMPTY;
+      }),
+    ).subscribe();
 
   }
 
