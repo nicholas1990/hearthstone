@@ -6,11 +6,11 @@ export const environment = {
   production: false,
   // response_type: 'code',
   client_id: 'f901e9aa49944a8db7de799555203c02',
-  secret_id:'3ndOs1oX3VHBx8NbFPo7IKsGbG7tWm1D',
+  secret_id: 'jpAa2SZ9oErVOP6UF3UdtGbVdIc6Zcpa',
   redirect_uri: 'http://localhost:8100',
-  authorize_url:'https://eu.battle.net/oauth/authorize',
-  token_url:'https://eu.battle.net/oauth/token',
-  hearthstone:'https://us.api.blizzard.com/hearthstone/'
+  authorize_url: 'https://eu.battle.net/oauth/authorize',
+  token_url: 'https://eu.battle.net/oauth/token',
+  hearthstone: 'https://us.api.blizzard.com/hearthstone/'
 };
 
 

@@ -5,11 +5,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { ApiHomeService } from '../services/home/api-home.service';
+import { LoadingControllerService } from '../core/services';
 import { HomeService } from '../services/home/home.service';
 import { Storage } from '@ionic/storage';
 
 import { EMPTY, of } from 'rxjs';
-// import { LoadingControllerService } from '../core/services';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -23,7 +23,7 @@ export class HomePage {
     private activatedRoute: ActivatedRoute,
     public loadingController: LoadingController,
     private storage: Storage,
-    // private loadingControllerService: LoadingControllerService,
+    private loadingControllerService: LoadingControllerService,
     private apiService: ApiHomeService,
     public service: HomeService) {
 
@@ -33,29 +33,18 @@ export class HomePage {
 
   }
 
-  async presentLoading() {
-    const loading = await this.loadingController.create({
-      message: 'Accesso in corso',
-    });
-    return await loading.present();
-    // const { role, data } = await loading.onDidDismiss();
-  }
-
   ionViewDidEnter(): void {
-    const loading = this.loadingController.create({
-      message: 'Accesso in corso',
-    });
+
+    this.loadingControllerService.createLoading('Accesso in corso');
 
     this.activatedRoute.queryParams.pipe(
       take(1),
       tap(async () => {
-        const loader = await loading;
-        loader.present();
+        this.loadingControllerService.presentLoading();
       }),
       switchMap((parameters: Authorization) => this.apiService.authorization(parameters).pipe(
         catchError(async error => {
-          const loader = await loading;
-          loader.dismiss();
+          this.loadingControllerService.dismissLoading();
           console.dir(error);
           return null;
         }),
@@ -65,12 +54,10 @@ export class HomePage {
         this.service.setStorageToken(data);
       }),
       tap(async () => {
-        const loader = await loading;
-        loader.dismiss();
+        this.loadingControllerService.dismissLoading();
       }),
       catchError(async error => {
-        const loader = await loading;
-        loader.dismiss();
+        this.loadingControllerService.dismissLoading();
         console.dir(error);
         return EMPTY;
       }),

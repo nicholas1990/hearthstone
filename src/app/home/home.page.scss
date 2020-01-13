@@ -1,16 +1,15 @@
 
 .mana-item{
     width: 13%;
-    background:none
+    background:none;
 }
 
 .card-list{
-    display: -webkit-box;
     display: flex;
     justify-items: flex-start;
     flex-wrap: wrap;
     justify-content: flex-start;
-    align-items: start;
+    align-items: flex-start;
     margin: 10px 10px;
     overflow: hidden;
 }
@@ -46,10 +45,10 @@
 }
 
 ion-radio-group > ion-item{
-    opacity: var(--ion-semi-opacity)
+    opacity: var(--ion-semi-opacity);
 }
 ion-radio-group .item-radio-checked{
-    opacity: var(--ion-full-opacity)
+    opacity: var(--ion-full-opacity);
     
 }
 ion-radio{

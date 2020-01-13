@@ -13,9 +13,9 @@ export class HomeService {
 
   constructor(private storage: Storage) { }
 
-  emitToken(value: Token): void {
-    this._token$.next(value);
-  }
+  // emitToken(value: Token): void {
+  //   this._token$.next(value);
+  // }
 
   getStorageToken() {
     this.storage.get('token').then((val: Token) => {
