@@ -2,14 +2,13 @@ export interface Authorization {
   code: string;
 }
 
-export interface Token{
+export interface Token {
   access_token: string;
   token_type: string;
   expires_in: number;
 }
 
-
-export interface RootObject {
+export interface Cards {
   cards: Card[];
   cardCount: number;
   pageCount: number;
@@ -111,4 +110,16 @@ export interface Card {
   attack?: number;
   minionTypeId?: number;
   armor?: number;
+}
+
+export interface ErrorResponse {
+  header: string;
+  status: number;
+  error: Error;
+  errorDescription: string;
+}
+
+interface Error {
+  error: string;
+  error_description: string;
 }

@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -17,17 +18,21 @@ export class HomeService {
   //   this._token$.next(value);
   // }
 
-  getStorageToken() {
-    this.storage.get('token').then((val: Token) => {
-        return val;
-      }, () => {
-        return null;
-      }
-    );
+  async getStorageToken(): Promise<Token> {
+
+    const token = await this.storage.get('token');
+    return token;
+
+    // return this.storage.get('token').then((val: Token) => {
+    //     return val.access_token;
+    //   }, () => {
+    //     return null;
+    //   }
+    // );
   }
 
-  setStorageToken(token: Token) {
-    this.storage.set('token', token);
+  async setStorageToken(token: Token): Promise<void> {
+    await this.storage.set('token', token);
   }
 
 }

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Storage } from '@ionic/storage';
 import { EMPTY } from 'rxjs';
 import { tap, switchMap, catchError, take } from 'rxjs/operators';
 import { Token, Authorization } from './../../models/home/home';
@@ -41,26 +40,23 @@ export class HomePage {
         this.loadingControllerService.presentLoading();
       }),
       switchMap((parameters: Authorization) => this.apiService.authorization(parameters).pipe(
-        catchError(async error => {
-          this.loadingControllerService.dismissLoading();
+        catchError(async (error) => {
+          await this.loadingControllerService.dismissLoading();
           this.toastControllerService.createToast(error);
-          this.toastControllerService.presentToast();
-          console.dir(error);
+          await this.toastControllerService.presentToast();
           return null;
         }),
       )),
-      tap((data: Token) => {
-        // this.service.emitToken(data);
-        this.service.setStorageToken(data);
+      tap(async (data: Token) => {
+        await this.service.setStorageToken(data);
       }),
       tap(async () => {
-        this.loadingControllerService.dismissLoading();
+        await this.loadingControllerService.dismissLoading();
       }),
-      catchError(async error => {
-        this.loadingControllerService.dismissLoading();
+      catchError(async (error) => {
+        await this.loadingControllerService.dismissLoading();
         this.toastControllerService.createToast(error);
-        this.toastControllerService.presentToast();
-        console.dir(error);
+        await this.toastControllerService.presentToast();
         return EMPTY;
       }),
     ).subscribe();

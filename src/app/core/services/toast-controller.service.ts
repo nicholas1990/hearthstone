@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { ErrorResponse } from 'src/models/home/home';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,11 @@ export class ToastControllerService {
 
   constructor(private toastController: ToastController) { }
 
-  createToast(error: object): void {
-    const getMessageError = (err: object): string => {
+  createToast(error: ErrorResponse): void {
+    const getMessageError = (err: ErrorResponse): string => {
       return `${err.status} - ${err.error.error}: ${err.error.error_description}`;
     };
+
     this.toast = this.toastController.create({
       message: getMessageError(error),
       duration: 3000,
