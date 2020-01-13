@@ -1,4 +1,3 @@
-import { switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 

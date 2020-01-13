@@ -51,6 +51,7 @@ export class HomePage {
       )),
       tap((data: Token) => {
         // this.service.emitToken(data);
+        debugger;
         this.service.setStorageToken(data);
       }),
       tap(async () => {
