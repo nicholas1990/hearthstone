@@ -1,15 +1,13 @@
-import { Token, Authorization } from './../../models/home/home';
-import { tap, switchMap, catchError, take } from 'rxjs/operators';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-import { ApiHomeService } from '../services/home/api-home.service';
-import { LoadingControllerService } from '../core/services';
-import { HomeService } from '../services/home/home.service';
 import { Storage } from '@ionic/storage';
+import { EMPTY } from 'rxjs';
+import { tap, switchMap, catchError, take } from 'rxjs/operators';
+import { Token, Authorization } from './../../models/home/home';
+import { ApiHomeService } from '../services/home/api-home.service';
+import { HomeService } from '../services/home/home.service';
+import { LoadingControllerService, ToastControllerService } from '../core/services';
 
-import { EMPTY, of } from 'rxjs';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -21,11 +19,11 @@ export class HomePage {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    public loadingController: LoadingController,
-    private storage: Storage,
     private loadingControllerService: LoadingControllerService,
+    private toastControllerService: ToastControllerService,
     private apiService: ApiHomeService,
-    public service: HomeService) {
+    public service: HomeService
+  ) {
 
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
@@ -45,6 +43,8 @@ export class HomePage {
       switchMap((parameters: Authorization) => this.apiService.authorization(parameters).pipe(
         catchError(async error => {
           this.loadingControllerService.dismissLoading();
+          this.toastControllerService.createToast(error);
+          this.toastControllerService.presentToast();
           console.dir(error);
           return null;
         }),
@@ -58,6 +58,8 @@ export class HomePage {
       }),
       catchError(async error => {
         this.loadingControllerService.dismissLoading();
+        this.toastControllerService.createToast(error);
+        this.toastControllerService.presentToast();
         console.dir(error);
         return EMPTY;
       }),

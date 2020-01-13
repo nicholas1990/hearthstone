@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiHomeService {
-   AllCards: string = `${environment.hearthstone}/cards/`;
+  allCards: string = `${environment.hearthstone}/cards/`;
 
   constructor(private http: HttpClient) { }
 
@@ -21,7 +21,7 @@ export class ApiHomeService {
       .append('grant_type', 'authorization_code')
       .append('redirect_uri', environment.redirect_uri);
 
-    const authorization = `${environment.client_id}:${environment.secret_id}`;
+    const authorization = `${environment.client_id}:${environment.secret_id}v`;
     const headers = new HttpHeaders()
     .append('Authorization', 'Basic ' + btoa(authorization))
     .append('Content-Type', 'application/x-www-form-urlencoded');
