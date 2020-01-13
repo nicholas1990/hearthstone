@@ -1,8 +1,5 @@
 <ion-content color="bg-primary">
 
-
-
-
   <ion-grid>
     <ion-row>
       <ion-col size="9">
@@ -10,7 +7,6 @@
           <ion-card-header class="ion-no-padding">
             <ion-list lines="full">
               <ion-radio-group style="display: flex; padding: 0 10px;">
-
 
                 <ion-item class="mana-item" *ngFor="let m of mana">
                   <ion-label class="p-relative ion-no-margin ion-no-padding">
@@ -21,9 +17,7 @@
                     <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" slot="start" value="{{m}}"
                       checked></ion-radio>
                   </ion-label>
-
                 </ion-item>
-
 
               </ion-radio-group>
             </ion-list>
@@ -45,10 +39,7 @@
                     </ion-card>
                   </ion-item>
                 </ion-list>
-
-
-
-
+                
               </ion-card-content>
 
             </ion-card>
@@ -65,17 +56,12 @@
           <ion-list>
             <ion-item lines="none">
               <ion-label>
-                
-                  <ion-button class="new-deck-btn" color="button-secondary">
-                    <ion-icon name="add-circle-outline"></ion-icon>Nuovo Mazzo
+                <ion-button class="new-deck-btn" color="button-secondary">
+                  <ion-icon name="add-circle-outline"></ion-icon>Nuovo Mazzo
                 </ion-button>
               </ion-label>
             </ion-item>
           </ion-list>
-
-
-
-
         </ion-card>
       </ion-col>
     </ion-row>
