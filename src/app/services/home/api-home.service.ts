@@ -10,7 +10,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiHomeService {
-  allCards: string = `${environment.hearthstone}/cards/`;
+
+  allCards = `${environment.hearthstone}/cards/`;
 
   constructor(private http: HttpClient) { }
 
@@ -30,6 +31,6 @@ export class ApiHomeService {
   }
 
   getCards() {
-    // 
+    //
   }
 }
