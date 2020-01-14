@@ -1,9 +1,12 @@
+import { ModalComponent } from './../components/modal/modal.component';
 
 import { environment } from './../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
+import { ModalController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-login',
@@ -15,7 +18,7 @@ export class LoginPage {
   loginForm: FormGroup;
   loginURL: string;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient,public modalController: ModalController) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -32,6 +35,13 @@ export class LoginPage {
     };
 
     this.loginURL = getLoginUrl();
+  }
+
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: ModalComponent
+    });
+    return await modal.present();
   }
 
 }

@@ -32,6 +32,7 @@ export class HomePage {
 
   ionViewDidEnter(): void {
 
+
     this.loadingControllerService.createLoading('Accesso in corso');
 
     this.activatedRoute.queryParams.pipe(
@@ -64,7 +65,8 @@ export class HomePage {
   }
 
   async onClick(): Promise<Token> {
-
+    let control =  this.authService.isAuthenticated()
+    console.log(control)
     const info = await this.authService.getStorageToken();
     const token = info.access_token;
     return info;
