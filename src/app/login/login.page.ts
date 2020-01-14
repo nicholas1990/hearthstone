@@ -1,4 +1,3 @@
-import { ModalComponent } from './../components/modal/modal.component';
 
 import { environment } from './../../environments/environment';
 import { Component, OnInit } from '@angular/core';
@@ -37,11 +36,8 @@ export class LoginPage {
     this.loginURL = getLoginUrl();
   }
 
-  async presentModal() {
-    const modal = await this.modalController.create({
-      component: ModalComponent
-    });
-    return await modal.present();
-  }
+  
+
+  
 
 }
