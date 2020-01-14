@@ -4,7 +4,7 @@ import { EMPTY } from 'rxjs';
 import { tap, switchMap, catchError, take } from 'rxjs/operators';
 import { Token, Authorization } from './../../models/home/home';
 import { ApiHomeService } from '../services/home/api-home.service';
-import { HomeService } from '../services/home/home.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 import { LoadingControllerService, ToastControllerService } from '../core/services';
 
 @Component({
@@ -21,7 +21,7 @@ export class HomePage {
     private loadingControllerService: LoadingControllerService,
     private toastControllerService: ToastControllerService,
     private apiService: ApiHomeService,
-    public service: HomeService
+    public authService: AuthenticationService
   ) {
 
     window.addEventListener('orientationchange', () => {
@@ -48,7 +48,7 @@ export class HomePage {
         }),
       )),
       tap(async (data: Token) => {
-        await this.service.setStorageToken(data);
+        await this.authService.setStorageToken(data);
       }),
       tap(async () => {
         await this.loadingControllerService.dismissLoading();
@@ -63,11 +63,11 @@ export class HomePage {
 
   }
 
-  async onClick():Promise<Token> {
+  async onClick(): Promise<Token> {
 
-    const info = await this.service.getStorageToken();
+    const info = await this.authService.getStorageToken();
     const token = info.access_token;
-    return info
+    return info;
   }
 
 }
