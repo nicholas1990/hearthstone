@@ -63,4 +63,11 @@ export class HomePage {
 
   }
 
+  async onClick(): void {
+
+    const info = await this.service.getStorageToken();
+    const token = info.access_token;
+
+  }
+
 }

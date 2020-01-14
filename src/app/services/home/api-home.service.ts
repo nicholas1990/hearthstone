@@ -22,7 +22,7 @@ export class ApiHomeService {
       .append('grant_type', 'authorization_code')
       .append('redirect_uri', environment.redirect_uri);
 
-    const authorization = `${environment.client_id}:${environment.secret_id}s`;
+    const authorization = `${environment.client_id}:${environment.secret_id}`;
     const headers = new HttpHeaders()
       .append('Authorization', 'Basic ' + btoa(authorization))
       .append('Content-Type', 'application/x-www-form-urlencoded');
