@@ -14,7 +14,7 @@
     overflow: hidden;
 }
 .card-list ion-item{
-    flex: 0 0 20%;
+    flex: 0 0 25%;
     padding: 4px;
 }
 .card-list ion-item ion-card .card-value{
@@ -39,6 +39,20 @@
     right: 9%;
     top: 85%;
     font-size: 12px;
+}
+.card-list ion-item ion-card .description{
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    width: 48px;
+    font-size: 5px;
+    text-align: center;
+}
+.card-list ion-item ion-card .name{
+    top: 60px;
+    width: 100%;
+    text-align: center;
+    font-size: 8px;
 }
 .card-list ion-label{
     display: inherit;
@@ -65,9 +79,7 @@ ion-item{
 ion-list{
     background:none
 }
-.mana-item:nth-last-child(1) .custom-mana-number{
-    left: 2px;
-}
+
 
     ion-avatar{
         width: 30px;
@@ -85,3 +97,4 @@ ion-list{
         padding-left: 5px;
     }
 
+    

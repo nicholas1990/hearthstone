@@ -1,0 +1,68 @@
+<ion-content color="bg-primary">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="9">
+        <ion-card class="ion-no-margin" color="old-mauve">
+          <ion-card-header class="ion-no-padding">
+            <ion-list lines="full">
+              <ion-radio-group style="display: flex; padding: 0 10px;">
+
+                <ion-item class="mana-item" *ngFor="let m of mana">
+                  <ion-label class="p-relative ion-no-margin ion-no-padding">
+                    <ion-avatar class="ion-no-margin ion-no-padding">
+                      <img src="https://hsreplay.net/static/images/mana_crystal.png">
+                    </ion-avatar>
+                    <span class="p-absolute custom-mana-number">{{m}}</span>
+                    <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" slot="start" value="{{m}}"
+                      checked></ion-radio>
+                  </ion-label>
+                </ion-item>
+
+              </ion-radio-group>
+            </ion-list>
+          </ion-card-header>
+
+          <ion-card-content class="ion-no-padding">
+            <ion-card class="ion-no-margin" color="bg-secondary">
+
+              <ion-card-content class="ion-no-padding ion-no-margin">
+
+                 <ion-list class="ion-no-padding ion-no-margin card-list " lines="none">
+                  
+                  <ion-item *ngFor="let card of this.homeService.cards$ | async; let i=index" class="no-lines">
+
+                    <ion-card  class="ion-no-padding ion-no-margin " (click)="getCard(card)">
+                      <img src="{{card.image.it_IT}}">
+                    </ion-card>
+                  </ion-item>
+                </ion-list> 
+                
+              </ion-card-content>
+
+            </ion-card>
+
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col size="3" column-padding>
+        <ion-card class="ion-no-margin" color="old-mauve">
+          <ion-card-header>
+            <ion-card-subtitle >Nuovo mazzo</ion-card-subtitle>
+          </ion-card-header>
+          <ion-list>
+            <ion-item lines="none">
+              <ion-label>
+                <ion-button class="new-deck-btn" color="button-secondary" (click)="onClick($event)">
+                  <ion-icon name="add-circle-outline"></ion-icon>Nuovo Mazzo
+                </ion-button>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

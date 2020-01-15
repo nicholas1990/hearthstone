@@ -1,0 +1,17 @@
+  <ion-radio-group style="display: flex; padding: 10px 10px; align-items: center;">
+
+    <ion-item class="mana-item" *ngFor="let m of skin" style="width: 30px;
+    height: 30px;    flex: 0 0 8%;">
+      <ion-label class="p-relative ion-no-margin ion-no-padding">
+        <ion-avatar class="ion-no-margin ion-no-padding" style="height: 30px;
+        width: 30px;">
+          <img src="{{m}}">
+        </ion-avatar>
+        <span class="p-absolute custom-mana-number"></span>
+        <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" slot="start" value="{{m}}"
+          checked></ion-radio>
+      </ion-label>
+    </ion-item>
+    <ion-icon class="close-mana" color="white" name="close" (click)="dismissPopover()"></ion-icon>
+  </ion-radio-group>
+
