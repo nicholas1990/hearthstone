@@ -168,6 +168,10 @@
               box-shadow: 1px 1px 11px;
           
             }
+            .skin-popover {
+                
+              --min-width: calc(75% - 17px);
+          }
             .skin-popover .popover-content {
               top: -2px !important;
               left: 10px !important;

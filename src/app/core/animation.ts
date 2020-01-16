@@ -40,16 +40,13 @@ export function myLeaveAnimation(AnimationC: Animation, baseEl: HTMLElement): Pr
 
     const backdropAnimation = new AnimationC();
     backdropAnimation.addElement(baseEl.querySelector('ion-backdrop'));
-    console.log(baseEl.querySelector('ion-backdrop'))
 
     const WAnimation = new AnimationC();
     WAnimation.addElement(baseEl.querySelector('.popover-wrapper'));
     WAnimation.fromTo('opacity', 1, 0.01);
-    console.log(baseEl.querySelector('.popover-wrapper'))
 
     const wrapperAnimation = new AnimationC();
     wrapperAnimation.addElement(baseEl.querySelector('.popover-content'));
-    console.log(baseEl.querySelector('.popover-content'))
 
     wrapperAnimation.beforeStyles({ 'opacity': 1 })
     .fromTo('translateY', '0%', '-100%')

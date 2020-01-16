@@ -38,10 +38,15 @@ export class ApiHomeService {
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + 'EUxsv9AVM76gzl2SXd8ZqWewEs2ywUrf6v')
       .append('Content-Type', 'application/x-www-form-urlencoded');
-
+    if(value){
       return this.http.get<Cards>(this.allCards+value, {
         headers:headers,
       });
+    }else{
+      return this.http.get<Cards>(this.allCards, {
+        headers:headers,
+      });
+    }
 
   }
 }

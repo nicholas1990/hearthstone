@@ -1,3 +1,36 @@
 .close-mana{
     font-size: 30px;
 }
+
+ion-radio-group > ion-item{
+    opacity: var(--ion-semi-opacity);
+}
+ion-radio-group .item-radio-checked{
+    opacity: var(--ion-full-opacity);
+    
+}
+ion-radio{
+    --color:transparent;
+    --color-checked: transparent;
+}
+ion-item{
+    --inner-padding-end: 0px;
+    --padding-start:0px;
+    --ion-background-color:none ;
+    ion-label{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+}
+
+ion-list{
+    background:none
+}
+ion-radio-group{
+    flex: 0 0 90%;
+}
+.close-skin  {
+    flex: 0 0 8%;
+}
