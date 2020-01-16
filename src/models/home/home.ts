@@ -7,7 +7,11 @@ export interface Token {
   token_type: string;
   expires_in: number;
 }
-
+export interface urlAttr {
+  class:string,
+  manaCost: string,
+  page: string
+}
 export interface Cards {
   cards: Card[];
   cardCount: number;

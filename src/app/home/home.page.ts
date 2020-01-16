@@ -1,16 +1,15 @@
 import { SkinFilterComponent } from './../components/skin-filter/skin-filter.component';
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
-
 import { HomeService } from './../services/home/home.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 import { tap, switchMap, catchError, take, map } from 'rxjs/operators';
-import { Token, Authorization, Cards, Card } from './../../models/home/home';
+import { Token, Authorization, Cards, Card, urlAttr} from './../../models/home/home';
 import { ApiHomeService } from '../services/home/api-home.service';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { LoadingControllerService, ToastControllerService } from '../core/services';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, Events } from '@ionic/angular';
 import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
 
 
@@ -21,10 +20,20 @@ import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
 })
 export class HomePage {
 
-  mana: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  
+
   cards$:Observable<Cards>;
   cards : Array<Card>;
-  paginate: number = 1
+  paginate: number = 1;
+  mana: string = '';
+  selectSkin: string = '';
+  urlAttribute: string = `&class=druid`;
+
+  validate : urlAttr = {
+    class:'druid',
+    manaCost: '',
+    page: ''
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -34,15 +43,19 @@ export class HomePage {
     public homeService: HomeService,
     public authService: AuthenticationService,
     public popoverController: PopoverController,
+    private events: Events
   ) {
 
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
+    
 
   }
 
   async ionViewDidEnter(): Promise<void> {
+    
+
     this.loadingControllerService.createLoading('Accesso in corso');
 
     this.activatedRoute.queryParams.pipe(
@@ -72,7 +85,7 @@ export class HomePage {
       }),
     ).subscribe();
 
-    this.apiService.getCards().pipe(
+    this.apiService.getCards(this.urlAttribute).pipe(
       map((res: Cards): Card[] => {
         return res.cards;
       }),
@@ -92,6 +105,7 @@ export class HomePage {
   }
 
   async onClick(): Promise<Token> {
+
     let control =  this.authService.isAuthenticated()
     console.log(control)
     const info = await this.authService.getStorageToken();
@@ -107,6 +121,10 @@ export class HomePage {
       leaveAnimation:myLeaveAnimation,
       translucent: true
     });
+    this.events.subscribe('selectManaEvent', res => {
+      this.filterMana(res)
+    });
+    
     return await popover.present();
   }
   async presentPopoverSkin(ev: any) {
@@ -118,6 +136,10 @@ export class HomePage {
       leaveAnimation:myLeaveAnimation,
       translucent: true
     });
+    this.events.subscribe('selectSkinEvent', res => {
+      this.filterSkin(res)
+    });
+  
     return await popover.present();
   }
   getCard(card:Card){
@@ -127,21 +149,64 @@ export class HomePage {
   backPage(){
     this.paginate--
     const page = `&page=${this.paginate}`
-    this.apiService.getCards(page).pipe(
-      map((res: Cards): Card[] => {
-        return res.cards;
-      }),
-      tap((res: Card[]) => {
-        console.log(res)
-        this.homeService.emitCards(res)
-        //this.cards = res.cards
-      })        
-    ).subscribe();
+    this.validate.page = page
+    this.validateUrl(page)
   }
   nextPage(){
     this.paginate++
     const page = `&page=${this.paginate}`
-    this.apiService.getCards(page).pipe(
+    this.validate.page = page
+    this.validateUrl(page)
+  }
+  filterSkin(skin?:string){
+    this.selectSkin = `&class=${skin}&page=1`;
+    this.validate.page = '1';
+    this.paginate=1;
+    this.validateUrl(this.selectSkin)
+  }
+  filterMana(mana?:string){
+    this.mana = `&manaCost=${mana}&page=1`;
+    this.validate.page = '1';
+    this.paginate=1;
+    this.validateUrl(this.mana)
+  }
+  validateUrl(attribute:string){
+    //prove
+    this.urlAttribute = this.urlAttribute+attribute
+    let b = this.urlAttribute.split('&')
+    b.forEach(element => {
+      let x = element.split('=')
+      
+      if(x.length == 2){
+          if(x[0] == 'class'){
+            this.validate.class = x[1]
+            //this.urlAttribute = this.urlAttribute+'&class='+x[1];
+          }else if(x[0] == 'manaCost'){
+            this.validate.manaCost = x[1]
+            //this.urlAttribute = this.urlAttribute+'&manaCost='+x[1];
+          }else if(x[0] == 'page'){
+            this.validate.page = x[1]
+            //this.urlAttribute = this.urlAttribute+'&page='+x[1];
+          }
+      }
+      }
+      );
+      //ricostruisco l'url
+      if(this.validate.class != '' ){
+        this.urlAttribute = `&class=${this.validate.class}`
+      }
+      if(this.validate.manaCost != ''){
+        this.urlAttribute = this.urlAttribute+`&manaCost=${this.validate.manaCost}`
+      }
+      if(this.validate.page != ''){
+        this.urlAttribute = this.urlAttribute+`&page=${this.validate.page}`
+      }
+      
+      console.log('url: '+this.urlAttribute)
+      console.log(this.validate)
+    
+    
+    this.apiService.getCards(this.urlAttribute).pipe(
       map((res: Cards): Card[] => {
         return res.cards;
       }),
@@ -151,8 +216,8 @@ export class HomePage {
         //this.cards = res.cards
       })        
     ).subscribe();
-
   }
+  
   
 
 }

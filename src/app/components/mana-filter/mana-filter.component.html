@@ -9,7 +9,7 @@
           <img src="../../../assets/img/mana_crystal.png">
         </ion-avatar>
         <span class="p-absolute custom-mana-number">{{m}}</span>
-        <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" slot="start" value="{{m}}"
+        <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="filterMana(m)" slot="start" value="{{m}}"
           checked></ion-radio>
       </ion-label>
     </ion-item>

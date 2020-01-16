@@ -5,13 +5,21 @@
 
     <ion-item class="mana-item" *ngFor="let s of skin" style="
     height: 40px;    flex: 0 0 20%;">
-      <ion-label class="p-relative ion-no-margin ion-no-padding">
+      <ion-label class="p-relative ion-no-margin ion-no-padding" *ngIf="s.name == 'druid'">
         <ion-avatar class="ion-no-margin ion-no-padding" style="height: 30px;
         width: 30px;">
           <img src="{{s.path}}">
         </ion-avatar>
-        <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" ionFocus="filterSkin(s.name)" ionSelect="filterSkin(s.name)" slot="start" value="{{s.name}}"
+        <ion-radio  class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="filterSkin(s.name)" slot="start"  value="{{s.name}}"
           checked></ion-radio>
+      </ion-label>
+      <ion-label class="p-relative ion-no-margin ion-no-padding" *ngIf="s.name != 'druid'">
+        <ion-avatar class="ion-no-margin ion-no-padding" style="height: 30px;
+        width: 30px;">
+          <img src="{{s.path}}">
+        </ion-avatar>
+        <ion-radio  class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="filterSkin(s.name)" slot="start"  value="{{s.name}}"
+          ></ion-radio>
       </ion-label>
     </ion-item>
     

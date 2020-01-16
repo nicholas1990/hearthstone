@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { Component, OnInit, } from '@angular/core';
+import { PopoverController, Events } from '@ionic/angular';
 
 @Component({
   selector: 'app-skin-filter',
@@ -7,6 +7,8 @@ import { PopoverController } from '@ionic/angular';
   styleUrls: ['./skin-filter.component.scss'],
 })
 export class SkinFilterComponent implements OnInit {
+
+  selectedSkin : string;
 
   skin: Object = [
     {
@@ -26,7 +28,7 @@ export class SkinFilterComponent implements OnInit {
       path:  '../../../assets/img/paladin.png',
     },
     {
-      name:'rouge',
+      name:'rogue',
       path: '../../../assets/img/rogue.png',
     },
     {
@@ -46,7 +48,7 @@ export class SkinFilterComponent implements OnInit {
       path: '../../../assets/img/priest.png',
     },
     {
-      name:'',
+      name:'neutral',
       path: '../../../assets/img/neutral.png',
     },
    
@@ -54,7 +56,7 @@ export class SkinFilterComponent implements OnInit {
 ];
 
 
-  constructor(public popoverController: PopoverController){ }
+  constructor(public popoverController: PopoverController,private events: Events){ }
 
   ngOnInit() {}
 
@@ -63,10 +65,11 @@ export class SkinFilterComponent implements OnInit {
    }
 
    filterSkin(skin:string){
-      console.log("ciao")
-      const page = `&class=${skin}`
-      console.log(page)
-
+      this.selectedSkin = `&class=${skin}`
+      this.events.publish('selectSkinEvent',this.selectedSkin);
+      this.popoverController.dismiss();
    }
+
+
 
 }
