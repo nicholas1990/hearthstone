@@ -36,3 +36,8 @@ ion-item{
 ion-radio-group  .mana-item:nth-last-child(2) .p-relative .custom-mana-number{
     left: 2px;
 }
+ion-radio-group  .mana-item:nth-child(1) .p-relative .custom-mana-number{
+  top: 3px;
+  left: 9px;
+  font-size: 24px;
+}

@@ -1,4 +1,4 @@
-<ion-list class="mana-list ion-no-margin" lines="full" style="">
+<ion-list class="mana-list ion-no-margin" lines="full" >
   <ion-radio-group style="display: flex; padding: 10px 10px; align-items: center;">
 
     <ion-item class="mana-item" *ngFor="let m of mana" style="width: 30px;
@@ -10,7 +10,9 @@
         </ion-avatar>
         <span class="p-absolute custom-mana-number">{{m}}</span>
         <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="filterMana(m)" slot="start" value="{{m}}"
-          checked></ion-radio>
+          *ngIf="selectedMana == m " checked></ion-radio>
+        <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="filterMana(m)" slot="start" value="{{m}}"
+        *ngIf="selectedMana != m"></ion-radio>
       </ion-label>
     </ion-item>
     <ion-icon class="close-mana" color="white" name="close" (click)="dismissPopover()"></ion-icon>

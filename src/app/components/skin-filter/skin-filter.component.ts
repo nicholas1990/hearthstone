@@ -1,5 +1,5 @@
 import { Component, OnInit, } from '@angular/core';
-import { PopoverController, Events } from '@ionic/angular';
+import { PopoverController, Events, NavParams } from '@ionic/angular';
 
 @Component({
   selector: 'app-skin-filter',
@@ -56,16 +56,20 @@ export class SkinFilterComponent implements OnInit {
 ];
 
 
-  constructor(public popoverController: PopoverController,private events: Events){ }
+  constructor(public popoverController: PopoverController,private events: Events,private navParams: NavParams){ }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.selectedSkin = this.navParams.get('skinSelected')
+    console.log(this.selectedSkin)
+  }
 
   async dismissPopover() {
     const popover = await this.popoverController.dismiss()
    }
 
    filterSkin(skin:string){
-      this.selectedSkin = `&class=${skin}`
+     this.selectedSkin=skin
+      //this.selectedSkin = `&class=${skin}`
       this.events.publish('selectSkinEvent',this.selectedSkin);
       this.popoverController.dismiss();
    }

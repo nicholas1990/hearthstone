@@ -25,8 +25,8 @@ export class HomePage {
   cards$:Observable<Cards>;
   cards : Array<Card>;
   paginate: number = 1;
-  mana: string = '';
-  selectSkin: string = '';
+  mana: string = '*';
+  selectSkin: string = 'druid';
   urlAttribute: string = `&class=druid`;
 
   validate : urlAttr = {
@@ -116,6 +116,7 @@ export class HomePage {
     const popover = await this.popoverController.create({
       component: ManaFilterComponent,
       event: ev,
+      componentProps:{manaSelected:this.mana},
       cssClass:'mana-popover',
       enterAnimation:myEnterAnimation,
       leaveAnimation:myLeaveAnimation,
@@ -131,6 +132,7 @@ export class HomePage {
     const popover = await this.popoverController.create({
       component: SkinFilterComponent,
       event: ev,
+      componentProps:{skinSelected:this.selectSkin},
       cssClass:'skin-popover',
       enterAnimation:myEnterAnimation,
       leaveAnimation:myLeaveAnimation,
@@ -159,34 +161,38 @@ export class HomePage {
     this.validateUrl(page)
   }
   filterSkin(skin?:string){
-    this.selectSkin = `&class=${skin}&page=1`;
+    this.selectSkin = skin
+    const skinValue = `&class=${skin}&page=1`;
     this.validate.page = '1';
     this.paginate=1;
-    this.validateUrl(this.selectSkin)
+    this.validateUrl(skinValue)
   }
   filterMana(mana?:string){
-    this.mana = `&manaCost=${mana}&page=1`;
+    this.mana = mana;
+    const manaValue = `&manaCost=${mana}&page=1`;
     this.validate.page = '1';
     this.paginate=1;
-    this.validateUrl(this.mana)
+    this.validateUrl(manaValue)
   }
   validateUrl(attribute:string){
-    //prove
+    //concateno gli attributi all'url
     this.urlAttribute = this.urlAttribute+attribute
-    let b = this.urlAttribute.split('&')
-    b.forEach(element => {
+    let splitUrl = this.urlAttribute.split('&')
+    splitUrl.forEach(element => {
       let x = element.split('=')
       
       if(x.length == 2){
           if(x[0] == 'class'){
             this.validate.class = x[1]
-            //this.urlAttribute = this.urlAttribute+'&class='+x[1];
           }else if(x[0] == 'manaCost'){
-            this.validate.manaCost = x[1]
-            //this.urlAttribute = this.urlAttribute+'&manaCost='+x[1];
+            if(x[1] == '*'){
+              this.validate.manaCost = ''
+            }else{
+              this.validate.manaCost = x[1]
+            }
+            
           }else if(x[0] == 'page'){
             this.validate.page = x[1]
-            //this.urlAttribute = this.urlAttribute+'&page='+x[1];
           }
       }
       }
@@ -202,8 +208,8 @@ export class HomePage {
         this.urlAttribute = this.urlAttribute+`&page=${this.validate.page}`
       }
       
-      console.log('url: '+this.urlAttribute)
-      console.log(this.validate)
+      //console.log('url: '+this.urlAttribute)
+      //console.log(this.validate)
     
     
     this.apiService.getCards(this.urlAttribute).pipe(

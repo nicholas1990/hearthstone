@@ -25,8 +25,8 @@
 
           <ion-card-content class="ion-no-padding">
             <ion-card class="ion-no-margin" color="bg-secondary" style="display: flex;">
-              <ion-label style="flex:0 0 5%; display: flex; align-items: center; justify-content: center;" >
-                <ion-icon name="arrow-round-back" (click)="backPage()"></ion-icon>
+              <ion-label class="arrow-wrapper left-arrow"  >
+                <img src="../../assets/img/arrow_left.png" (click)="backPage()">
               </ion-label>
               <ion-card-content class="ion-no-padding ion-no-margin" style="flex: 1 1 auto;">
 
@@ -45,8 +45,8 @@
                 </ion-list> 
                 
               </ion-card-content>
-              <ion-label style="flex:0 0 5%; display: flex; align-items: center; justify-content: center;" >
-                <ion-icon name="arrow-round-forward" (click)="nextPage()"></ion-icon>
+              <ion-label class="arrow-wrapper right-arrow" style="flex:0 0 5%; display: flex; align-items: center; justify-content: center;     padding-right: 8px;" >
+                <img src="../../assets/img/arrow_right.png" (click)="nextPage()">
               </ion-label>
 
             </ion-card>

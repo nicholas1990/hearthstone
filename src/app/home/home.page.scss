@@ -96,6 +96,19 @@ ion-list{
         width: 100%;
         padding-left: 5px;
     }
-    
+    .arrow-wrapper{
+        flex:0 0 5%; display: flex; align-items: center; justify-content: center;    
+    }
+    .arrow-wrapper img:hover{
+        opacity: 0.6;
+        transition: all ease-in-out 0.3s;
+
+    }
+    .arrow-wrapper img{
+        opacity: 1;
+        transition: all ease-in-out 0.3s;
+    }
+    .arrow-wrapper.left-arrow{ padding-left: 8px;}
+    .arrow-wrapper.right-arrow{ padding-right: 8px;}
 
     
