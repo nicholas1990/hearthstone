@@ -13,7 +13,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 })
 export class ApiHomeService {
 
-  allCards = `${environment.hearthstone}cards?pageSize=8`;
+  allCards = `${environment.hearthstone}cards?&pageSize=8`;
 
   constructor(private http: HttpClient) { }
 
@@ -36,7 +36,7 @@ export class ApiHomeService {
     const value = attribute
     console.log(value)
     const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + 'EUd3KFJrY8gy6ptINW2skQ0JdYSls2zH07')
+      .append('Authorization', 'Bearer ' + 'EUlxmkL6IOWPFxljBezq7k1WNWaDCpkUjU')
       .append('Content-Type', 'application/x-www-form-urlencoded');
     if(value){
       return this.http.get<Cards>(this.allCards+value, {

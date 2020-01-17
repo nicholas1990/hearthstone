@@ -68,7 +68,7 @@ export class SkinFilterComponent implements OnInit {
    }
 
    filterSkin(skin:string){
-     this.selectedSkin=skin
+     this.selectedSkin=skin;
       //this.selectedSkin = `&class=${skin}`
       this.events.publish('selectSkinEvent',this.selectedSkin);
       this.popoverController.dismiss();
