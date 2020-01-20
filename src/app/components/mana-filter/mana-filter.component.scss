@@ -1,0 +1,43 @@
+.mana-list{
+    background: #ffffffff !important;
+}
+ion-list{
+    background:none
+}
+ion-radio-group > ion-item{
+  opacity: var(--ion-semi-opacity);
+}
+ion-radio-group .item-radio-checked{
+  opacity: var(--ion-full-opacity);
+  
+}
+ion-radio{
+  --color:transparent;
+  --color-checked: transparent;
+}
+ion-item{
+  --inner-padding-end: 0px;
+  --padding-start:0px;
+  --ion-background-color:none ;
+  
+}
+.mana-list{
+    background: #ffffff00 !important;
+}
+.mana-list ion-radio-group{
+    background: #ffffff00 !important;
+}
+.close-mana{
+    font-size: 30px;
+}
+.p-relative{
+    height: 40px;
+}
+ion-radio-group  .mana-item:nth-last-child(2) .p-relative .custom-mana-number{
+    left: 2px;
+}
+ion-radio-group  .mana-item:nth-child(1) .p-relative .custom-mana-number{
+  top: 3px;
+  left: 9px;
+  font-size: 24px;
+}

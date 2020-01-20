@@ -1,11 +1,17 @@
+import { SkinFilterComponent } from './../components/skin-filter/skin-filter.component';
+import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
+import { HomeService } from './../services/home/home.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EMPTY } from 'rxjs';
-import { tap, switchMap, catchError, take } from 'rxjs/operators';
-import { Token, Authorization } from './../../models/home/home';
+import { EMPTY, Observable } from 'rxjs';
+import { tap, switchMap, catchError, take, map } from 'rxjs/operators';
+import { Token, Authorization, Cards, Card, urlAttr} from './../../models/home/home';
 import { ApiHomeService } from '../services/home/api-home.service';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { LoadingControllerService, ToastControllerService } from '../core/services';
+import { PopoverController, Events } from '@ionic/angular';
+import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
+
 
 @Component({
   selector: 'app-home',
@@ -14,23 +20,41 @@ import { LoadingControllerService, ToastControllerService } from '../core/servic
 })
 export class HomePage {
 
-  mana: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  
+
+  cards$:Observable<Cards>;
+  cards : Array<Card>;
+  paginate: number = 1;
+  mana: string = '*';
+  selectSkin: string = 'druid';
+  urlAttribute: string = `&class=druid`;
+
+  validate : urlAttr = {
+    class:'druid',
+    manaCost: '',
+    page: ''
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private loadingControllerService: LoadingControllerService,
     private toastControllerService: ToastControllerService,
     private apiService: ApiHomeService,
-    public authService: AuthenticationService
+    public homeService: HomeService,
+    public authService: AuthenticationService,
+    public popoverController: PopoverController,
+    private events: Events
   ) {
 
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
+    
 
   }
 
   async ionViewDidEnter(): Promise<void> {
+    
 
     this.loadingControllerService.createLoading('Accesso in corso');
 
@@ -61,24 +85,145 @@ export class HomePage {
       }),
     ).subscribe();
 
-    // const response = this.authService.isAuthenticated();
-
+    this.apiService.getCards(this.urlAttribute).pipe(
+      map((res: Cards): Card[] => {
+        return res.cards;
+      }),
+      tap((res: Card[]) => {
+        console.log(res)
+        this.homeService.emitCards(res)
+        //this.cards = res.cards
+      })        
+    ).subscribe();
+    
     const getInfo = async (): Promise<Token> => {
       return await this.authService.getStorageToken();
     };
-
     const asd = await getInfo();
-
     console.log('token ', asd.access_token);
 
   }
 
   async onClick(): Promise<Token> {
-    const control =  this.authService.isAuthenticated();
-    // console.log(control);
+
+    let control =  this.authService.isAuthenticated()
+    console.log(control)
     const info = await this.authService.getStorageToken();
     return info;
 
   }
+  async presentPopoverMana(ev: any) {
+    const popover = await this.popoverController.create({
+      component: ManaFilterComponent,
+      event: ev,
+      componentProps:{manaSelected:this.mana},
+      cssClass:'mana-popover',
+      enterAnimation:myEnterAnimation,
+      leaveAnimation:myLeaveAnimation,
+      translucent: true
+    });
+    this.events.subscribe('selectManaEvent', res => {
+      this.filterMana(res)
+    });
+    
+    return await popover.present();
+  }
+  async presentPopoverSkin(ev: any) {
+    const popover = await this.popoverController.create({
+      component: SkinFilterComponent,
+      event: ev,
+      componentProps:{skinSelected:this.selectSkin},
+      cssClass:'skin-popover',
+      enterAnimation:myEnterAnimation,
+      leaveAnimation:myLeaveAnimation,
+      translucent: true
+    });
+    this.events.subscribe('selectSkinEvent', res => {
+      this.filterSkin(res)
+    });
+  
+    return await popover.present();
+  }
+  getCard(card:Card){
+    console.log(card)
+
+  }
+  backPage(){
+    this.paginate--
+    const page = `&page=${this.paginate}`
+    this.validate.page = page
+    this.validateUrl(page)
+  }
+  nextPage(){
+    this.paginate++
+    const page = `&page=${this.paginate}`
+    this.validate.page = page
+    this.validateUrl(page)
+  }
+  filterSkin(skin?:string){
+    this.selectSkin = skin
+    const skinValue = `&class=${skin}&page=1`;
+    this.validate.page = '1';
+    this.paginate=1;
+    this.validateUrl(skinValue)
+  }
+  filterMana(mana?:string){
+    this.mana = mana;
+    const manaValue = `&manaCost=${mana}&page=1`;
+    this.validate.page = '1';
+    this.paginate=1;
+    this.validateUrl(manaValue)
+  }
+  validateUrl(attribute:string){
+    //concateno gli attributi all'url
+    this.urlAttribute = this.urlAttribute+attribute
+    let splitUrl = this.urlAttribute.split('&')
+    splitUrl.forEach(element => {
+      let x = element.split('=')
+      
+      if(x.length == 2){
+          if(x[0] == 'class'){
+            this.validate.class = x[1]
+          }else if(x[0] == 'manaCost'){
+            if(x[1] == '*'){
+              this.validate.manaCost = ''
+            }else{
+              this.validate.manaCost = x[1]
+            }
+            
+          }else if(x[0] == 'page'){
+            this.validate.page = x[1]
+          }
+      }
+      }
+      );
+      //ricostruisco l'url
+      if(this.validate.class != '' ){
+        this.urlAttribute = `&class=${this.validate.class}`
+      }
+      if(this.validate.manaCost != ''){
+        this.urlAttribute = this.urlAttribute+`&manaCost=${this.validate.manaCost}`
+      }
+      if(this.validate.page != ''){
+        this.urlAttribute = this.urlAttribute+`&page=${this.validate.page}`
+      }
+      
+      //console.log('url: '+this.urlAttribute)
+      //console.log(this.validate)
+    
+    
+    this.apiService.getCards(this.urlAttribute).pipe(
+      map((res: Cards): Card[] => {
+        return res.cards;
+      }),
+      tap((res: Card[]) => {
+        console.log(res)
+        this.homeService.emitCards(res)
+        //this.cards = res.cards
+      })        
+    ).subscribe();
+  }
+  
+  
 
 }

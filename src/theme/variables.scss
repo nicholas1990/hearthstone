@@ -151,3 +151,37 @@
             
 
   
+              .mana-popover {
+                
+                --min-width: calc(75% - 17px);
+            }
+            .mana-popover .popover-content {
+              top: -2px !important;
+              left: 10px !important;
+              border-radius: 0px !important;
+              background: #673147 !important;
+              border: 2px solid #D8AB70;
+              border-bottom-left-radius: 10px !important;
+              border-bottom-right-radius: 10px !important;
+              border-top-left-radius: 0px !important;
+              border-top-right-radius: 0px !important;
+              box-shadow: 1px 1px 11px;
+          
+            }
+            .skin-popover {
+                
+              --min-width: calc(75% - 17px);
+          }
+            .skin-popover .popover-content {
+              top: -2px !important;
+              left: 10px !important;
+              border-radius: 0px !important;
+              background: #673147 !important;
+              border: 2px solid #D8AB70;
+              border-bottom-left-radius: 10px !important;
+              border-bottom-right-radius: 10px !important;
+              border-top-left-radius: 0px !important;
+              border-top-right-radius: 0px !important;
+              box-shadow: 1px 1px 11px;
+          
+            }            

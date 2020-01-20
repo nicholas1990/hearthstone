@@ -1,3 +1,4 @@
+import { Cards } from './../../../models/home/home';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -5,13 +6,14 @@ import { Authorization, Token } from '../../../models/home/home';
 import { environment } from './../../../environments/environment';
 
 import { Observable } from 'rxjs';
+import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiHomeService {
 
-  allCards = `${environment.hearthstone}/cards/`;
+  allCards = `${environment.hearthstone}cards?pageSize=8`;
 
   constructor(private http: HttpClient) { }
 
@@ -30,7 +32,21 @@ export class ApiHomeService {
     return this.http.post<Token>(environment.token_url, null, {params, headers});
   }
 
-  getCards() {
-    //
+  getCards(attribute?:any) {
+    const value = attribute
+    console.log(value)
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Bearer ' + 'EUd3KFJrY8gy6ptINW2skQ0JdYSls2zH07')
+      .append('Content-Type', 'application/x-www-form-urlencoded');
+    if(value){
+      return this.http.get<Cards>(this.allCards+value, {
+        headers:headers,
+      });
+    }else{
+      return this.http.get<Cards>(this.allCards, {
+        headers:headers,
+      });
+    }
+
   }
 }
