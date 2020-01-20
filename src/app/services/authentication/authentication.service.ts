@@ -20,7 +20,6 @@ export class AuthenticationService {
   async getStorageToken(): Promise<Token> {
 
     const token = await this.storage.get('token');
-    
     return token;
 
     // return this.storage.get('token').then((val: Token) => {
@@ -35,7 +34,8 @@ export class AuthenticationService {
     await this.storage.set('token', token);
     this._token$.next(token);
   }
-  isAuthenticated(){
+  
+  isAuthenticated() {
     return this._token$.value;
   }
 

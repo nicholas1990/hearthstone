@@ -22,9 +22,7 @@ import { element } from 'protractor';
 })
 export class HomePage {
 
-  
-
-  cards$:Observable<Cards>;
+  // cards$: Observable<Cards>;
   cards : Array<Card>;
   paginate: number = 1;
   mana: string = '*';
@@ -52,19 +50,17 @@ export class HomePage {
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
-    
 
   }
 
   async ionViewDidEnter(): Promise<void> {
-    
 
     this.loadingControllerService.createLoading('Accesso in corso');
 
     this.activatedRoute.queryParams.pipe(
       take(1),
       tap(async () => {
-        this.loadingControllerService.presentLoading();
+        await this.loadingControllerService.presentLoading();
       }),
       switchMap((parameters: Authorization) => this.apiService.authorization(parameters).pipe(
         catchError(async (error) => {
@@ -112,8 +108,8 @@ export class HomePage {
     let control =  this.authService.isAuthenticated()
     console.log(control)
     const info = await this.authService.getStorageToken();
-    const token = info.access_token;
     return info;
+
   }
   async presentModalSkin() {
     const modal = await this.modalController.create({
