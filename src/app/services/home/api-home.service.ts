@@ -36,7 +36,7 @@ export class ApiHomeService {
     const value = attribute
     console.log(value)
     const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + 'EUlxmkL6IOWPFxljBezq7k1WNWaDCpkUjU')
+      .append('Authorization', 'Bearer ' + 'EUngTOzhaf7WNr6N7817B6tTQ7wmxopmzJ')
       .append('Content-Type', 'application/x-www-form-urlencoded');
     if(value){
       return this.http.get<Cards>(this.allCards+value, {

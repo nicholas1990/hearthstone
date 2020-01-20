@@ -33,11 +33,18 @@ ion-item{
 .p-relative{
     height: 40px;
 }
+.custom-mana-number{
+  left: 17px;
+}
 ion-radio-group  .mana-item:nth-last-child(2) .p-relative .custom-mana-number{
-    left: 3px;
+    left: 11px;
 }
 ion-radio-group  .mana-item:nth-child(1) .p-relative .custom-mana-number{
   top: 3px;
-  left: 9px;
+  left: 17px;
   font-size: 24px;
+}
+.mana-item ion-label{
+  display: flex;
+  justify-content: center;
 }
