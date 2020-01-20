@@ -3,9 +3,9 @@
   <ion-grid>
     <ion-row>
       <ion-col size="9">
-        <ion-card class="ion-no-margin" color="old-mauve" style="height: calc(100vh - 20px ) !important;">
+        <ion-card class="ion-no-margin main-block" color="old-mauve">
           <ion-card-header class="ion-no-padding">
-            <ion-list style="display: flex; padding: 0 10px; ">
+            <ion-list class="filter-list" >
               <ion-item lines="none">
                 <ion-label>
                   <ion-button color="bg-secondary" (click)="presentPopoverSkin()">
@@ -24,28 +24,23 @@
           </ion-card-header>
 
           <ion-card-content class="ion-no-padding">
-            <ion-card class="ion-no-margin" color="bg-secondary" style="display: flex;">
+            <ion-card class="ion-no-margin card-paginator-wrapper" color="bg-secondary" >
               <ion-label class="arrow-wrapper left-arrow"  >
                 <img src="../../assets/img/arrow_left.png"  (click)="backPage()">
               </ion-label>
-              <ion-card-content class="ion-no-padding ion-no-margin" style="flex: 1 1 auto;">
+              <ion-card-content class="ion-no-padding ion-no-margin card-wrapper" >
 
-                 <ion-list class="ion-no-padding ion-no-margin card-list " style="height: 75vh;" lines="none">
+                 <ion-list class="ion-no-padding ion-no-margin card-list "  lines="none">
                   
-                  <ion-avatar *ngFor="let card of this.homeService.cards$ | async; let i=index" style="max-height: calc(50% - 20px);     max-height: calc(50% - 20px);
-                   flex: 0 0 25%;
-                  display: flex;
-                  justify-content: center;
-                  height: calc(50% - 20px);
-    --border-radius: none;" class="no-lines">
+                  <ion-avatar *ngFor="let card of this.homeService.cards$ | async; let i=index"  class="no-lines">
 
-                      <img style="height: 100%; width:auto" src="{{card.image.it_IT}}">
+                      <img src="{{card.image.it_IT}}">
 
                   </ion-avatar>
                 </ion-list> 
                 
               </ion-card-content>
-              <ion-label class="arrow-wrapper right-arrow" style="flex:0 0 5%; display: flex; align-items: center; justify-content: center;     padding-right: 8px;" >
+              <ion-label class="arrow-wrapper right-arrow"  >
                 <img src="../../assets/img/arrow_right.png" (click)="nextPage()">
               </ion-label>
 

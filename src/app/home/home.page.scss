@@ -3,8 +3,20 @@
     width: 13%;
     background:none;
 }
-
+.main-block{
+    height: calc(100vh - 20px ) !important;
+}
+.filter-list{
+    display: flex; padding: 0 10px; 
+}
+.card-paginator-wrapper{
+    display: flex;
+}
+.card-wrapper{
+    flex: 1 1 auto;
+}
 .card-list{
+    height: 75vh;
     display: flex;
     justify-items: flex-start;
     flex-wrap: wrap;
@@ -12,6 +24,17 @@
     align-items: flex-start;
     margin: 10px 10px;
     overflow: hidden;
+    ion-avatar{
+        max-height: calc(50% - 20px);     max-height: calc(50% - 20px);
+                   flex: 0 0 25%;
+                  display: flex;
+                  justify-content: center;
+                  height: calc(50% - 20px);
+    --border-radius: none;
+    img{
+        height: 100%; width:auto
+    }
+    }
 }
 .card-list ion-item{
     flex: 0 0 25%;

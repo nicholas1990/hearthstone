@@ -1,11 +1,9 @@
 <ion-list class="mana-list ion-no-margin" lines="full" >
-  <ion-radio-group style="display: flex; padding: 10px 10px; align-items: center;">
+  <ion-radio-group >
 
-    <ion-item class="mana-item" *ngFor="let m of mana" style="width: 30px;
-    height: 30px;    flex: 0 0 8%;">
+    <ion-item class="mana-item" *ngFor="let m of mana" >
       <ion-label class="p-relative ion-no-margin ion-no-padding">
-        <ion-avatar class="ion-no-margin ion-no-padding" style="height: 30px;
-        width: 30px;">
+        <ion-avatar class="ion-no-margin ion-no-padding" >
           <img src="../../../assets/img/mana_crystal.png">
         </ion-avatar>
         <span class="p-absolute custom-mana-number">{{m}}</span>

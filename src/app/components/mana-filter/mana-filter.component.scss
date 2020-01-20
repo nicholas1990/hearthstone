@@ -1,3 +1,19 @@
+ion-radio-group{
+  display: flex; 
+  padding: 10px 10px; 
+  align-items: center;
+}
+.mana-item{
+  width: 30px;
+    height: 30px;
+        flex: 0 0 8%;
+        ion-label{
+          ion-avatar{
+            height: 30px;
+            width: 30px;
+          }
+        }
+}
 .mana-list{
     background: #ffffffff !important;
 }
