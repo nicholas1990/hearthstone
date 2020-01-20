@@ -1,0 +1,35 @@
+<ion-content color="bg-primary">
+  <ion-header >
+    <ion-toolbar color="bg-primary">
+      <ion-title >Componi un mazzo</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-row class="page-wrapper">
+    <ion-col class="column-left" size="1" >
+      <ion-button color="bg-secondary" (click)="dismissModal()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <ion-col color="bg-primary"> 
+      <ion-list color="bg-primary">   
+        <ion-radio-group color="bg-primary" class="select-skin-wrapper" >
+    
+          <ion-item color="bg-primary" class="skin-item" *ngFor="let s of skin" >
+            <ion-label  class="button-skin">
+              <ion-avatar class="ion-no-margin ion-no-padding" style="height: 30px;
+              width: 30px;">
+                <img src="{{s.path}}">
+              </ion-avatar>
+              <ion-radio class="custom-mana-button ion-no-margin ion-no-padding"  slot="start" value="{{s.name}}"
+                ></ion-radio>
+            </ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+    </ion-col>
+    <ion-col size="1">
+      
+    </ion-col>
+  </ion-row>
+  
+</ion-content>

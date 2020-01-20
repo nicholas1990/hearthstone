@@ -1,16 +1,18 @@
+import { ModalSkinComponent } from './../components/modal-skin/modal-skin.component';
 import { SkinFilterComponent } from './../components/skin-filter/skin-filter.component';
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
 import { HomeService } from './../services/home/home.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
-import { tap, switchMap, catchError, take, map } from 'rxjs/operators';
+import { tap, switchMap, catchError, take, map, filter } from 'rxjs/operators';
 import { Token, Authorization, Cards, Card, urlAttr} from './../../models/home/home';
 import { ApiHomeService } from '../services/home/api-home.service';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { LoadingControllerService, ToastControllerService } from '../core/services';
-import { PopoverController, Events } from '@ionic/angular';
+import { PopoverController, Events, ModalController } from '@ionic/angular';
 import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
+import { element } from 'protractor';
 
 
 @Component({
@@ -41,7 +43,8 @@ export class HomePage {
     public homeService: HomeService,
     public authService: AuthenticationService,
     public popoverController: PopoverController,
-    private events: Events
+    private events: Events,
+    public modalController: ModalController
   ) {
 
     window.addEventListener('orientationchange', () => {
@@ -112,6 +115,12 @@ export class HomePage {
     const info = await this.authService.getStorageToken();
     return info;
 
+  }
+  async presentModalSkin() {
+    const modal = await this.modalController.create({
+      component: ModalSkinComponent
+    });
+    return await modal.present();
   }
   async presentPopoverMana(ev: any) {
     const popover = await this.popoverController.create({

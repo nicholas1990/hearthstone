@@ -28,7 +28,7 @@ export class ManaFilterComponent implements OnInit {
 
     //const manaValue = `&manaCost=${mana}`
     this.events.publish('selectManaEvent',this.selectedMana);
-    this.popoverController.dismiss();
+   // this.popoverController.dismiss();
  }
 
 }
