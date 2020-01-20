@@ -20,9 +20,7 @@ import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
 })
 export class HomePage {
 
-  
-
-  cards$:Observable<Cards>;
+  // cards$: Observable<Cards>;
   cards : Array<Card>;
   paginate: number = 1;
   mana: string = '*';
@@ -49,19 +47,17 @@ export class HomePage {
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
-    
 
   }
 
   async ionViewDidEnter(): Promise<void> {
-    
 
     this.loadingControllerService.createLoading('Accesso in corso');
 
     this.activatedRoute.queryParams.pipe(
       take(1),
       tap(async () => {
-        this.loadingControllerService.presentLoading();
+        await this.loadingControllerService.presentLoading();
       }),
       switchMap((parameters: Authorization) => this.apiService.authorization(parameters).pipe(
         catchError(async (error) => {
