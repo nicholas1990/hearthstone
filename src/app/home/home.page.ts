@@ -81,22 +81,27 @@ export class HomePage {
       }),
     ).subscribe();
 
-    this.apiService.getCards(this.urlAttribute).pipe(
-      map((res: Cards): Card[] => {
-        return res.cards;
-      }),
-      tap((res: Card[]) => {
-        console.log(res)
-        this.homeService.emitCards(res)
-        //this.cards = res.cards
-      })        
-    ).subscribe();
-    
+    this.getCards();
+
     const getInfo = async (): Promise<Token> => {
       return await this.authService.getStorageToken();
     };
     const asd = await getInfo();
     console.log('token ', asd.access_token);
+
+  }
+
+  private getCards() {
+
+    this.apiService.getCards(this.urlAttribute).pipe(
+      map((res: Cards): Card[] => {
+        return res.cards;
+      }),
+    ).subscribe(
+      (res: Card[]) => {
+        this.homeService.emitCards(res);
+      }
+    );
 
   }
 
