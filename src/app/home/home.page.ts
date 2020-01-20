@@ -30,8 +30,7 @@ export class HomePage {
 
   }
 
-  ionViewDidEnter(): void {
-
+  async ionViewDidEnter(): Promise<void> {
 
     this.loadingControllerService.createLoading('Accesso in corso');
 
@@ -62,14 +61,24 @@ export class HomePage {
       }),
     ).subscribe();
 
+    // const response = this.authService.isAuthenticated();
+
+    const getInfo = async (): Promise<Token> => {
+      return await this.authService.getStorageToken();
+    };
+
+    const asd = await getInfo();
+
+    console.log('token ', asd.access_token);
+
   }
 
   async onClick(): Promise<Token> {
-    let control =  this.authService.isAuthenticated()
-    console.log(control)
+    const control =  this.authService.isAuthenticated();
+    // console.log(control);
     const info = await this.authService.getStorageToken();
-    const token = info.access_token;
     return info;
+
   }
 
 }
