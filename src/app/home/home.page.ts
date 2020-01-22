@@ -31,7 +31,6 @@ export class HomePage {
   urlAttribute: string = `&class=druid`;
   createDeck: boolean = false;
   skinCover:string;
-  private subscription: Subscription
 
   deck : Deck = {
     id:0,
@@ -132,6 +131,7 @@ export class HomePage {
     });
     this.events.subscribe('selectSkinEvent', res => {
       this.createDeck = res ? this.createDeck = true : false;
+      this.skinCover= res.path;
       this.selectedSkin(res.name);
     });
     return await modal.present();
