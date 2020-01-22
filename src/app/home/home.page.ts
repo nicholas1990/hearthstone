@@ -1,16 +1,18 @@
+import { ModalSkinComponent } from './../components/modal-skin/modal-skin.component';
 import { SkinFilterComponent } from './../components/skin-filter/skin-filter.component';
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
 import { HomeService } from './../services/home/home.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
-import { tap, switchMap, catchError, take, map } from 'rxjs/operators';
-import { Token, Authorization, Cards, Card, urlAttr} from './../../models/home/home';
+import { tap, switchMap, catchError, take, map, filter } from 'rxjs/operators';
+import { Token, Authorization, Cards, Card, urlAttr, Deck } from './../../models/home/home';
 import { ApiHomeService } from '../services/home/api-home.service';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { LoadingControllerService, ToastControllerService } from '../core/services';
-import { PopoverController, Events } from '@ionic/angular';
+import { PopoverController, Events, ModalController } from '@ionic/angular';
 import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
+import { element } from 'protractor';
 
 
 @Component({
@@ -20,14 +22,20 @@ import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
 })
 export class HomePage {
 
-  
-
-  cards$:Observable<Cards>;
+  // cards$: Observable<Cards>;
   cards : Array<Card>;
   paginate: number = 1;
   mana: string = '*';
+  maxLength: number = 30;
   selectSkin: string = 'druid';
   urlAttribute: string = `&class=druid`;
+  createDeck: boolean = false;
+
+  deck : Deck = {
+    id:0,
+    cards:[],
+    counter:0,
+  }
 
   validate : urlAttr = {
     class:'druid',
@@ -43,25 +51,24 @@ export class HomePage {
     public homeService: HomeService,
     public authService: AuthenticationService,
     public popoverController: PopoverController,
-    private events: Events
+    private events: Events,
+    public modalController: ModalController
   ) {
 
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
-    
 
   }
 
   async ionViewDidEnter(): Promise<void> {
-    
 
     this.loadingControllerService.createLoading('Accesso in corso');
 
     this.activatedRoute.queryParams.pipe(
       take(1),
       tap(async () => {
-        this.loadingControllerService.presentLoading();
+        await this.loadingControllerService.presentLoading();
       }),
       switchMap((parameters: Authorization) => this.apiService.authorization(parameters).pipe(
         catchError(async (error) => {
@@ -85,17 +92,8 @@ export class HomePage {
       }),
     ).subscribe();
 
-    this.apiService.getCards(this.urlAttribute).pipe(
-      map((res: Cards): Card[] => {
-        return res.cards;
-      }),
-      tap((res: Card[]) => {
-        console.log(res)
-        this.homeService.emitCards(res)
-        //this.cards = res.cards
-      })        
-    ).subscribe();
-    
+    this.getCards();
+
     const getInfo = async (): Promise<Token> => {
       return await this.authService.getStorageToken();
     };
@@ -104,13 +102,41 @@ export class HomePage {
 
   }
 
+  private getCards() {
+
+    this.apiService.getCards(this.urlAttribute).pipe(
+      map((res: Cards): Card[] => {
+        return res.cards;
+      }),
+    ).subscribe(
+      (res: Card[]) => {
+        this.homeService.emitCards(res);
+      }
+    );
+
+  }
+
   async onClick(): Promise<Token> {
 
     let control =  this.authService.isAuthenticated()
     console.log(control)
     const info = await this.authService.getStorageToken();
-    const token = info.access_token;
     return info;
+
+  }
+  async presentModalSkin() {
+    const modal = await this.modalController.create({
+      component: ModalSkinComponent
+    });
+    this.events.subscribe('selectSkinEvent', res => {
+      if(res){
+        this.createDeck = true
+      }else{
+        this.createDeck = false
+      }
+      this.selectedSkin(res.name)
+    });
+    return await modal.present();
   }
   async presentPopoverMana(ev: any) {
     const popover = await this.popoverController.create({
@@ -144,9 +170,27 @@ export class HomePage {
   
     return await popover.present();
   }
-  getCard(card:Card){
-    console.log(card)
+  addCard(card:Card){
+    if(this.deck.counter < this.maxLength){
+      if(this.deck.cards.filter(element => element.id == card.id).length == 0){
+        console.log("uguale a 0");
+        card.counter = 1
+        this.deck.cards.push(card)
+        this.deck.counter++
+      }else if(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 1).length == 1 ){
+        console.log("uguale a 1");
+        card.counter = 2
+        this.deck.cards.filter(element => element.id == card.id).length = 2
+        this.deck.counter++
+      }else{
+        console.log("massimo carte")
+      }
 
+
+     console.log(this.deck)
+
+    }
+    
   }
   backPage(){
     this.paginate--
@@ -162,7 +206,7 @@ export class HomePage {
   }
   filterSkin(skin?:string){
     this.selectSkin = skin
-    const skinValue = `&class=${skin}&page=1`;
+    const skinValue = `&class=${skin},neutral&page=1`;
     this.validate.page = '1';
     this.paginate=1;
     this.validateUrl(skinValue)
@@ -173,6 +217,14 @@ export class HomePage {
     this.validate.page = '1';
     this.paginate=1;
     this.validateUrl(manaValue)
+  }
+  selectedSkin(skin:string){
+    this.selectSkin = skin
+    const skinValue = `&class=${skin},neutral&page=1`;
+    this.validate.page = '1';
+    this.paginate=1;
+    this.validateUrl(skinValue)
+
   }
   validateUrl(attribute:string){
     //concateno gli attributi all'url
@@ -213,6 +265,7 @@ export class HomePage {
     
     
     this.apiService.getCards(this.urlAttribute).pipe(
+      take(1),
       map((res: Cards): Card[] => {
         return res.cards;
       }),

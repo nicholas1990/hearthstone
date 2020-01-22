@@ -114,6 +114,13 @@ export interface Card {
   attack?: number;
   minionTypeId?: number;
   armor?: number;
+  counter?:number
+}
+export interface Deck{
+  id?: number;
+  cards?: Card[];
+  counter?:number;
+
 }
 
 export interface ErrorResponse {

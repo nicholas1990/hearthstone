@@ -1,0 +1,17 @@
+.card-login{
+  height: calc(100vh - 48px ) !important;
+  display: flex;
+  flex-direction: column;
+  ion-card-header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.login-btn{
+    color: #fff;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

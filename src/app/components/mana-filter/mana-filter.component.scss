@@ -1,3 +1,19 @@
+ion-radio-group{
+  display: flex; 
+  padding: 10px 10px; 
+  align-items: center;
+}
+.mana-item{
+  width: 30px;
+    height: 30px;
+        flex: 0 0 8%;
+        ion-label{
+          ion-avatar{
+            height: 30px;
+            width: 30px;
+          }
+        }
+}
 .mana-list{
     background: #ffffffff !important;
 }
@@ -33,11 +49,18 @@ ion-item{
 .p-relative{
     height: 40px;
 }
+.custom-mana-number{
+  left: 17px;
+}
 ion-radio-group  .mana-item:nth-last-child(2) .p-relative .custom-mana-number{
-    left: 2px;
+    left: 11px;
 }
 ion-radio-group  .mana-item:nth-child(1) .p-relative .custom-mana-number{
   top: 3px;
-  left: 9px;
+  left: 17px;
   font-size: 24px;
+}
+.mana-item ion-label{
+  display: flex;
+  justify-content: center;
 }

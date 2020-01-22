@@ -13,7 +13,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 })
 export class ApiHomeService {
 
-  allCards = `${environment.hearthstone}cards?pageSize=8`;
+  allCards = `${environment.hearthstone}cards?&pageSize=8`;
 
   constructor(private http: HttpClient) { }
 

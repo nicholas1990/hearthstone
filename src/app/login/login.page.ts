@@ -17,7 +17,7 @@ export class LoginPage {
   loginForm: FormGroup;
   loginURL: string;
 
-  constructor(private fb: FormBuilder, private http: HttpClient,public modalController: ModalController) {
+  constructor(private fb: FormBuilder, private http: HttpClient, public modalController: ModalController) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -35,9 +35,5 @@ export class LoginPage {
 
     this.loginURL = getLoginUrl();
   }
-
-  
-
-  
 
 }

@@ -23,12 +23,10 @@ export class ManaFilterComponent implements OnInit {
    }
 
    filterMana(mana:string){
-
      this.selectedMana = mana
-
     //const manaValue = `&manaCost=${mana}`
     this.events.publish('selectManaEvent',this.selectedMana);
-    this.popoverController.dismiss();
+   // this.popoverController.dismiss();
  }
 
 }
