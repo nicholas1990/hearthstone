@@ -4,7 +4,7 @@ import { ManaFilterComponent } from './../components/mana-filter/mana-filter.com
 import { HomeService } from './../services/home/home.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EMPTY, Observable } from 'rxjs';
+import { EMPTY, Observable, Subscription } from 'rxjs';
 import { tap, switchMap, catchError, take, map, filter } from 'rxjs/operators';
 import { Token, Authorization, Cards, Card, urlAttr, Deck } from './../../models/home/home';
 import { ApiHomeService } from '../services/home/api-home.service';
@@ -30,6 +30,8 @@ export class HomePage {
   selectSkin: string = 'druid';
   urlAttribute: string = `&class=druid`;
   createDeck: boolean = false;
+  skinCover:string;
+  private subscription: Subscription
 
   deck : Deck = {
     id:0,
@@ -37,7 +39,7 @@ export class HomePage {
     counter:0,
   }
 
-  validate : urlAttr = {
+  private validate : urlAttr = {
     class:'druid',
     manaCost: '',
     page: ''
@@ -146,7 +148,9 @@ export class HomePage {
     });
     this.events.subscribe('selectManaEvent', res => {
       this.filterMana(res)
+      this.events.unsubscribe('selectManaEvent')
     });
+    
     
     return await popover.present();
   }
@@ -162,6 +166,7 @@ export class HomePage {
     });
     this.events.subscribe('selectSkinEvent', res => {
       this.filterSkin(res)
+      this.events.unsubscribe('selectSkinEvent')
     });
   
     return await popover.present();
@@ -181,10 +186,7 @@ export class HomePage {
       }else{
         console.log("massimo carte")
       }
-
-
      console.log(this.deck)
-
     }
     
   }
@@ -202,9 +204,10 @@ export class HomePage {
   }
   filterSkin(skin?:string){
     this.selectSkin = skin
-    const skinValue = `&class=${skin},neutral&page=1`;
+    const skinValue = `&class=${skin},neutral&page=1&manaCost=*`;
     this.validate.page = '1';
     this.paginate=1;
+    this.mana='*';
     this.validateUrl(skinValue)
   }
   filterMana(mana?:string){
