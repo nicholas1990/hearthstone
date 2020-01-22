@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Events } from '@ionic/angular';
 
 @Component({
   selector: 'app-modal-skin',
@@ -48,13 +48,19 @@ export class ModalSkinComponent implements OnInit {
   ]
 
 
-  constructor(public modalController: ModalController) { }
+  constructor(public modalController: ModalController,private events: Events) { }
 
   ngOnInit() {}
 
   async dismissModal() {
 
     return await this.modalController.dismiss();
+  }
+
+  selectSkin(skin:string){
+    this.events.publish('selectSkinEvent',skin);
+    return  this.modalController.dismiss();
+
   }
 
 }

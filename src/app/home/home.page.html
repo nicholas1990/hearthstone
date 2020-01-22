@@ -5,42 +5,42 @@
       <ion-col size="9">
         <ion-card class="ion-no-margin main-block" color="old-mauve">
           <ion-card-header class="ion-no-padding">
-            <ion-list class="filter-list" >
+            <ion-list class="filter-list">
               <ion-item lines="none">
                 <ion-label>
                   <ion-button color="bg-secondary" (click)="presentPopoverSkin()">
-                  Classi
-                </ion-button>
-              </ion-label>
+                    Classi
+                  </ion-button>
+                </ion-label>
               </ion-item>
               <ion-item lines="none">
                 <ion-label>
                   <ion-button color="bg-secondary" (click)="presentPopoverMana()">
-                  Filtri
-                </ion-button>
-              </ion-label>
+                    Filtri
+                  </ion-button>
+                </ion-label>
               </ion-item>
             </ion-list>
           </ion-card-header>
 
           <ion-card-content class="ion-no-padding">
-            <ion-card class="ion-no-margin card-paginator-wrapper" color="bg-secondary" >
-              <ion-label class="arrow-wrapper left-arrow"  >
-                <img src="../../assets/img/arrow_left.png"  (click)="backPage()">
+            <ion-card class="ion-no-margin card-paginator-wrapper" color="bg-secondary">
+              <ion-label  class="arrow-wrapper left-arrow">
+                <img *ngIf="paginate !== 1" src="../../assets/img/arrow_left.png" (click)="backPage()">
               </ion-label>
-              <ion-card-content class="ion-no-padding ion-no-margin card-wrapper" >
+              <ion-card-content class="ion-no-padding ion-no-margin card-wrapper">
 
-                 <ion-list class="ion-no-padding ion-no-margin card-list "  lines="none">
-                  
-                  <ion-avatar *ngFor="let card of this.homeService.cards$ | async; let i=index"  class="no-lines">
+                <ion-list class="ion-no-padding ion-no-margin card-list " lines="none">
 
-                      <img src="{{card.image.it_IT}}">
+                  <ion-avatar *ngFor="let card of this.homeService.cards$ | async; let i=index" class="no-lines">
+
+                    <img  [ngClass]="createDeck?'':'disabled-image'"  src="{{card.image.it_IT}}" (click)="addCard(card)">
 
                   </ion-avatar>
-                </ion-list> 
-                
+                </ion-list>
+
               </ion-card-content>
-              <ion-label class="arrow-wrapper right-arrow"  >
+              <ion-label class="arrow-wrapper right-arrow">
                 <img src="../../assets/img/arrow_right.png" (click)="nextPage()">
               </ion-label>
 
@@ -51,19 +51,62 @@
 
       </ion-col>
       <ion-col size="3" column-padding>
-        <ion-card class="ion-no-margin" color="old-mauve">
-          <ion-card-header>
-            <ion-card-subtitle >Nuovo mazzo</ion-card-subtitle>
+        <ion-card class="create-deck    ion-no-margin" [ngClass]="createDeck?'active':''" color="old-mauve">
+          <ion-card-header class="subtitle">
+            <ion-card-subtitle>Nuovo mazzo</ion-card-subtitle>
           </ion-card-header>
-          <ion-list>
-            <ion-item lines="none">
-              <ion-label>
-                <ion-button class="new-deck-btn" color="button-secondary" (click)="presentModalSkin()">
-                  <ion-icon name="add-circle-outline"></ion-icon>Nuovo Mazzo
-                </ion-button>
-              </ion-label>
+          <ion-card-header class="selected-skin">
+            <ion-card-subtitle class="ion-no-margin ion-no-padding">
+              <img src="../../../assets/img/druid.png" alt="">
+              <ion-text>Componi mazzo</ion-text>
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-list class="list-btn" lines="none">
+            <ion-item>
+              <ion-button class="new-deck-btn" color="button-secondary" (click)="presentModalSkin()">
+                <ion-icon name="add-circle-outline"></ion-icon>Nuovo Mazzo
+              </ion-button>
             </ion-item>
           </ion-list>
+          <ion-list class="slot-list " lines="none">
+            <ion-item class="card-wrapper" lines="none" *ngFor="let card of deck.cards">
+              <ion-label class="card-info">
+                <ion-item-sliding class="slidable-list">
+                  <ion-item class="card-item">
+                    <ion-label>
+                      <ion-avatar class="mana">
+                        <img src="../../assets/img/mana_crystal.png">
+                        <ion-text>{{card.manaCost}}</ion-text>
+                      </ion-avatar>
+                      <ion-text>{{card.name.it_IT}}</ion-text>
+                      <ion-text class="number-card">{{card.counter}}</ion-text>
+
+                    </ion-label>
+                    <ion-text class="color-layer">
+
+                    </ion-text>
+                    <img class="image-crop"
+                      [src]="card.cropImage"
+                      alt="">
+                  </ion-item>
+
+                  <ion-item-options side="end">
+                    <ion-item-option color="danger" (click)="unread(item)">
+                      <ion-icon name="remove"></ion-icon>
+                    </ion-item-option>
+                  </ion-item-options>
+                </ion-item-sliding>
+              </ion-label>
+              
+            </ion-item>
+            
+          </ion-list>
+          
+          <ion-text class="card-counter " [ngClass]="deck.cards.length>6? 'shadow':''">
+            <ion-text class="shadow-bottom">
+            </ion-text>
+              {{deck.counter }}/{{maxLength}}
+            </ion-text>
         </ion-card>
       </ion-col>
     </ion-row>

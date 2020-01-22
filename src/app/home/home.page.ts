@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 import { tap, switchMap, catchError, take, map, filter } from 'rxjs/operators';
-import { Token, Authorization, Cards, Card, urlAttr} from './../../models/home/home';
+import { Token, Authorization, Cards, Card, urlAttr, Deck } from './../../models/home/home';
 import { ApiHomeService } from '../services/home/api-home.service';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { LoadingControllerService, ToastControllerService } from '../core/services';
@@ -26,8 +26,16 @@ export class HomePage {
   cards : Array<Card>;
   paginate: number = 1;
   mana: string = '*';
+  maxLength: number = 30;
   selectSkin: string = 'druid';
   urlAttribute: string = `&class=druid`;
+  createDeck: boolean = false;
+
+  deck : Deck = {
+    id:0,
+    cards:[],
+    counter:0,
+  }
 
   validate : urlAttr = {
     class:'druid',
@@ -120,6 +128,14 @@ export class HomePage {
     const modal = await this.modalController.create({
       component: ModalSkinComponent
     });
+    this.events.subscribe('selectSkinEvent', res => {
+      if(res){
+        this.createDeck = true
+      }else{
+        this.createDeck = false
+      }
+      this.selectedSkin(res.name)
+    });
     return await modal.present();
   }
   async presentPopoverMana(ev: any) {
@@ -154,9 +170,27 @@ export class HomePage {
   
     return await popover.present();
   }
-  getCard(card:Card){
-    console.log(card)
+  addCard(card:Card){
+    if(this.deck.counter < this.maxLength){
+      if(this.deck.cards.filter(element => element.id == card.id).length == 0){
+        console.log("uguale a 0");
+        card.counter = 1
+        this.deck.cards.push(card)
+        this.deck.counter++
+      }else if(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 1).length == 1 ){
+        console.log("uguale a 1");
+        card.counter = 2
+        this.deck.cards.filter(element => element.id == card.id).length = 2
+        this.deck.counter++
+      }else{
+        console.log("massimo carte")
+      }
 
+
+     console.log(this.deck)
+
+    }
+    
   }
   backPage(){
     this.paginate--
@@ -172,7 +206,7 @@ export class HomePage {
   }
   filterSkin(skin?:string){
     this.selectSkin = skin
-    const skinValue = `&class=${skin}&page=1`;
+    const skinValue = `&class=${skin},neutral&page=1`;
     this.validate.page = '1';
     this.paginate=1;
     this.validateUrl(skinValue)
@@ -183,6 +217,14 @@ export class HomePage {
     this.validate.page = '1';
     this.paginate=1;
     this.validateUrl(manaValue)
+  }
+  selectedSkin(skin:string){
+    this.selectSkin = skin
+    const skinValue = `&class=${skin},neutral&page=1`;
+    this.validate.page = '1';
+    this.paginate=1;
+    this.validateUrl(skinValue)
+
   }
   validateUrl(attribute:string){
     //concateno gli attributi all'url
@@ -223,6 +265,7 @@ export class HomePage {
     
     
     this.apiService.getCards(this.urlAttribute).pipe(
+      take(1),
       map((res: Cards): Card[] => {
         return res.cards;
       }),

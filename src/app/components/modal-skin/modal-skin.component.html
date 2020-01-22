@@ -19,7 +19,7 @@
               <ion-avatar class="ion-no-margin ion-no-padding">
                 <img src="{{s.path}}">
               </ion-avatar>
-              <ion-radio class="custom-mana-button ion-no-margin ion-no-padding"  slot="start" value="{{s.name}}"
+              <ion-radio class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="selectSkin(s)"  slot="start" value="{{s.name}}"
                 ></ion-radio>
             </ion-label>
           </ion-item>

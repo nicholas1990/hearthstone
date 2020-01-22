@@ -18,10 +18,8 @@ export class AuthenticationService {
   // }
 
   async getStorageToken(): Promise<Token> {
-
     const token = await this.storage.get('token');
     return token;
-
     // return this.storage.get('token').then((val: Token) => {
     //     return val.access_token;
     //   }, () => {
