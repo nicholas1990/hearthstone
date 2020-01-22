@@ -129,12 +129,8 @@ export class HomePage {
       component: ModalSkinComponent
     });
     this.events.subscribe('selectSkinEvent', res => {
-      if(res){
-        this.createDeck = true
-      }else{
-        this.createDeck = false
-      }
-      this.selectedSkin(res.name)
+      this.createDeck = res ? this.createDeck = true : false;
+      this.selectedSkin(res.name);
     });
     return await modal.present();
   }
