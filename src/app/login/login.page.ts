@@ -5,6 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { tap, map } from 'rxjs/operators';
 import { ModalController } from '@ionic/angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 
 @Component({
@@ -17,15 +18,21 @@ export class LoginPage {
   loginForm: FormGroup;
   loginURL: string;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, public modalController: ModalController) {
+  constructor(private fb: FormBuilder, private http: HttpClient,
+     public modalController: ModalController,
+     private iab: InAppBrowser) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
   }
 
+  
   ionViewDidEnter(): void {
-
+    
+    
+  }
+  openBrowser(){
     const getLoginUrl = (): string => {
       const url = environment.authorize_url;
       const responsetype = `code`;
@@ -34,6 +41,8 @@ export class LoginPage {
     };
 
     this.loginURL = getLoginUrl();
+    const browser = this.iab.create(this.loginURL,'_blank');
+    
   }
 
 }

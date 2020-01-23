@@ -25,7 +25,7 @@
 
           <ion-card-content class="ion-no-padding">
             <ion-card class="ion-no-margin card-paginator-wrapper" color="bg-secondary">
-              <ion-label  class="arrow-wrapper left-arrow">
+              <ion-label class="arrow-wrapper left-arrow">
                 <img *ngIf="paginate !== 1" src="../../assets/img/arrow_left.png" (click)="backPage()">
               </ion-label>
               <ion-card-content class="ion-no-padding ion-no-margin card-wrapper">
@@ -34,7 +34,7 @@
 
                   <ion-avatar *ngFor="let card of this.homeService.cards$ | async; let i=index" class="no-lines">
 
-                    <img  [ngClass]="createDeck?'':'disabled-image'"  src="{{card.image.it_IT}}" (click)="addCard(card)">
+                    <img [ngClass]="createDeck?'':'disabled-image'" src="{{card.image.it_IT}}" (click)="addCard(card)">
 
                   </ion-avatar>
                 </ion-list>
@@ -85,28 +85,26 @@
                     <ion-text class="color-layer">
 
                     </ion-text>
-                    <img class="image-crop"
-                      [src]="card.cropImage"
-                      alt="">
+                    <img class="image-crop" [src]="card.cropImage" alt="">
                   </ion-item>
 
                   <ion-item-options side="end">
-                    <ion-item-option color="danger" (click)="unread(item)">
+                    <ion-item-option color="danger" (click)="removeCard(card)">
                       <ion-icon name="remove"></ion-icon>
                     </ion-item-option>
                   </ion-item-options>
                 </ion-item-sliding>
               </ion-label>
-              
+
             </ion-item>
-            
+
           </ion-list>
-          
+
           <ion-text class="card-counter " [ngClass]="deck.cards.length>6? 'shadow':''">
             <ion-text class="shadow-bottom">
             </ion-text>
-              {{deck.counter }}/{{maxLength}}
-            </ion-text>
+            {{deck.counter }}/{{maxLength}}
+          </ion-text>
         </ion-card>
       </ion-col>
     </ion-row>
