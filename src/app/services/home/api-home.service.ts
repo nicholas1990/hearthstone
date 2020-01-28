@@ -1,8 +1,8 @@
-import { Cards } from './../../../models/home/home';
+import { Cards, Token } from './../../../models/home/home';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Authorization, Token } from '../../../models/home/home';
+import { Authorization } from '../../../models/home/home';
 import { environment } from './../../../environments/environment';
 
 import { Observable } from 'rxjs';
@@ -28,15 +28,16 @@ export class ApiHomeService {
     const headers = new HttpHeaders()
       .append('Authorization', 'Basic ' + btoa(authorization))
       .append('Content-Type', 'application/x-www-form-urlencoded');
-
-    return this.http.post<Token>(environment.token_url, null, {params, headers});
+      
+    return this.http.post<Token>(environment.token_url, null, {params, headers});;
   }
 
-  getCards(attribute?:any) {
+  getCards(attribute?:any,token?:Token) {
     const value = attribute
     console.log(value)
+
     const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + 'EUngTOzhaf7WNr6N7817B6tTQ7wmxopmzJ')
+      .append('Authorization', 'Bearer ' + 'EUJPGAtMgKNdOSNCd0HilcRJmwGpNxquE2')
       .append('Content-Type', 'application/x-www-form-urlencoded');
     if(value){
       return this.http.get<Cards>(this.allCards+value, {

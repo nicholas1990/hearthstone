@@ -28,7 +28,7 @@ export class AuthenticationService {
     // );
   }
 
-  async setStorageToken(token: Token): Promise<void> {
+  async setStorageToken(token?: Token): Promise<void> {
     await this.storage.set('token', token);
     this._token$.next(token);
   }

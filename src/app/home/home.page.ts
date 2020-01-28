@@ -3,7 +3,7 @@ import { SkinFilterComponent } from './../components/skin-filter/skin-filter.com
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
 import { HomeService } from './../services/home/home.service';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subscription } from 'rxjs';
 import { tap, switchMap, catchError, take, map, filter } from 'rxjs/operators';
 import { Token, Authorization, Cards, Card, urlAttr, Deck } from './../../models/home/home';
@@ -32,6 +32,8 @@ export class HomePage {
   createDeck: boolean = false;
   skinCover:string;
 
+  token:Token;
+
   deck : Deck = {
     id:0,
     cards:[],
@@ -53,7 +55,8 @@ export class HomePage {
     public authService: AuthenticationService,
     public popoverController: PopoverController,
     private events: Events,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private router : Router
   ) {
 
     window.addEventListener('orientationchange', () => {
@@ -63,7 +66,6 @@ export class HomePage {
   }
 
   async ionViewDidEnter(): Promise<void> {
-
     this.loadingControllerService.createLoading('Accesso in corso');
 
     this.activatedRoute.queryParams.pipe(
@@ -78,13 +80,14 @@ export class HomePage {
           await this.toastControllerService.presentToast();
           return null;
         }),
+        tap(async (data: Token) => {
+          console.log("token",data)
+          await this.authService.setStorageToken(data);
+        }),
+        tap(async () => {
+          await this.loadingControllerService.dismissLoading();
+        }),
       )),
-      tap(async (data: Token) => {
-        await this.authService.setStorageToken(data);
-      }),
-      tap(async () => {
-        await this.loadingControllerService.dismissLoading();
-      }),
       catchError(async (error) => {
         await this.loadingControllerService.dismissLoading();
         this.toastControllerService.createToast(error);
@@ -93,19 +96,20 @@ export class HomePage {
       }),
     ).subscribe();
 
+
     this.getCards();
 
-    const getInfo = async (): Promise<Token> => {
-      return await this.authService.getStorageToken();
-    };
-    const asd = await getInfo();
-    console.log('token ', asd.access_token);
+    
 
   }
 
-  private getCards() {
+  private async getCards() {
 
-    this.apiService.getCards(this.urlAttribute).pipe(
+
+    
+    this.token =  await this.authService.getStorageToken();
+    console.log(this.token)
+    this.apiService.getCards(this.urlAttribute,this.token).pipe(
       map((res: Cards): Card[] => {
         return res.cards;
       }),
@@ -118,10 +122,9 @@ export class HomePage {
   }
 
   async onClick(): Promise<Token> {
-
-    let control =  this.authService.isAuthenticated()
-    console.log(control)
+    //this.authService.setStorageToken()
     const info = await this.authService.getStorageToken();
+    console.log(info)
     return info;
 
   }
@@ -274,7 +277,7 @@ export class HomePage {
       //console.log(this.validate)
     
     
-    this.apiService.getCards(this.urlAttribute).pipe(
+    this.apiService.getCards(this.urlAttribute,this.token).pipe(
       take(1),
       map((res: Cards): Card[] => {
         return res.cards;
