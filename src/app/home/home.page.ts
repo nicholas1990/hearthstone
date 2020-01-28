@@ -30,6 +30,8 @@ export class HomePage {
   createDeck: boolean = false;
   skinCover:string;
 
+  token:Token;
+
   deck : Deck = {
     id: 0,
     cards: [],
@@ -136,12 +138,10 @@ export class HomePage {
   addCard(card:Card){
     if(this.deck.counter < this.maxLength){
       if(this.deck.cards.filter(element => element.id == card.id).length == 0){
-        console.log("uguale a 0");
         card.counter = 1
         this.deck.cards.push(card)
         this.deck.counter++
       }else if(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 1).length == 1 ){
-        console.log("uguale a 1");
         card.counter = 2
         this.deck.cards.filter(element => element.id == card.id).length = 2
         this.deck.counter++
@@ -152,6 +152,19 @@ export class HomePage {
       this.homeStore.emitDeck(this.deck);
     }
     
+  }
+  removeCard(card:Card){
+    console.log(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 2).length)
+    if(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 2).length == 1){
+      card.counter = 1
+      this.deck.counter--
+    }else if(this.deck.cards.filter(element => element.id == card.id).length == 1){  
+      card.counter = 0;
+      this.deck.counter--
+      this.deck.cards = this.deck.cards.filter(element => element.id != card.id);
+    }else{
+      console.log("errore")
+    }
   }
   backPage(){
     this.paginate--

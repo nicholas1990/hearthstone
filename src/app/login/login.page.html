@@ -3,7 +3,7 @@
 
   <ion-card color="white" class="card-login" >
     <ion-card-header >
-      <ion-img
+      <ion-img 
         src="https://upload.wikimedia.org/wikipedia/it/thumb/1/1c/Hearthstone_Logo.png/260px-Hearthstone_Logo.png">
       </ion-img>
 
@@ -25,13 +25,15 @@
         <ion-note *ngIf="loginForm.get('password').errors?.required && (loginForm.get('password').dirty || loginForm.get('password').touched)" color="danger">Inserisci Email</ion-note>
       </form>
       <ion-button [disabled]="loginForm.invalid"  class="ion-margin-top" color="queen-blue" size="small" expand="block" >
-        Login
+        Login  
       </ion-button>
       <ion-button  class="ion-margin-top" color="queen-blue" size="small" expand="block" >
-       <a class="login-btn href"   href="{{loginURL}}" >  <ion-icon name="globe"></ion-icon>Accedi con battle.net</a>
-      </ion-button>    
+       <a class="login-btn href"    (click)="openBrowser()" >  <ion-icon name="globe"></ion-icon>Accedi con battle.net</a>
+      </ion-button>  
+      {{code | json}} 
     
     </ion-card-content>
+    
   </ion-card>
 
 </ion-content>

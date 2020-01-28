@@ -9,23 +9,24 @@
               <ion-item lines="none">
                 <ion-label>
                   <ion-button color="bg-secondary" (click)="presentPopoverSkin()" [disabled]="createDeck">
-                    Classi
+                    Classi  
                   </ion-button>
                 </ion-label>
               </ion-item>
               <ion-item lines="none">
                 <ion-label>
-                  <ion-button color="bg-secondary" (click)="presentPopoverMana()">
+                  <ion-button color="bg-secondary" (click)="onClick()">
                     Filtri
                   </ion-button>
                 </ion-label>
               </ion-item>
             </ion-list>
+            
           </ion-card-header>
 
           <ion-card-content class="ion-no-padding">
             <ion-card class="ion-no-margin card-paginator-wrapper" color="bg-secondary">
-              <ion-label  class="arrow-wrapper left-arrow">
+              <ion-label class="arrow-wrapper left-arrow">
                 <img *ngIf="paginate !== 1" src="../../assets/img/arrow_left.png" (click)="backPage()">
               </ion-label>
               <ion-card-content class="ion-no-padding ion-no-margin card-wrapper">
@@ -83,25 +84,23 @@
                     <ion-text class="color-layer">
 
                     </ion-text>
-                    <img class="image-crop"
-                      [src]="card.cropImage"
-                      alt="">
+                    <img class="image-crop" [src]="card.cropImage" alt="">
                   </ion-item>
 
                   <ion-item-options side="end">
-                    <ion-item-option color="danger">
+                    <ion-item-option color="danger" (click)="removeCard(card)">
                       <ion-icon name="remove"></ion-icon>
                     </ion-item-option>
                   </ion-item-options>
                 </ion-item-sliding>
               </ion-label>
-              
+
             </ion-item>
 
             <button (click)="saveDeck()">Save deck</button>
             
           </ion-list>
-          
+
           <ion-text class="card-counter " [ngClass]="deck.cards.length>6? 'shadow':''">
             <ion-text class="shadow-bottom">
             </ion-text>
