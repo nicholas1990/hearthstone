@@ -7,17 +7,20 @@ export interface Token {
   token_type: string;
   expires_in: number;
 }
+
 export interface urlAttr {
   class:string,
   manaCost: string,
   page: string
 }
+
 export interface Cards {
   cards: Card[];
   cardCount: number;
   pageCount: number;
   page: number;
 }
+
 export interface Name {
   de_DE: string;
   en_US: string;
@@ -116,11 +119,17 @@ export interface Card {
   armor?: number;
   counter?:number
 }
-export interface Deck{
+
+export interface Deck {
   id?: number;
   cards?: Card[];
-  counter?:number;
+  counter?: number;
+}
 
+export interface LoggedUser {
+  sub: string,
+  id: number,
+  battletag: string
 }
 
 export interface ErrorResponse {

@@ -11,14 +11,12 @@ export class ToastControllerService {
 
   constructor(private toastController: ToastController) { }
 
-  createToast(error: ErrorResponse): void {
-    const getMessageError = (err: ErrorResponse): string => {
-      return `${err.status} - ${err.error.error}: ${err.error.error_description}`;
-    };
+  createToast(error: string, color: string): void {
 
     this.toast = this.toastController.create({
-      message: getMessageError(error),
-      duration: 3000,
+      message: error,
+      color: color,
+      duration: 5000,
     });
   }
 

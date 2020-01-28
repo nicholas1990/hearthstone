@@ -18,6 +18,7 @@ export class LoadingControllerService {
 
   async presentLoading(): Promise<void> {
     const loading = await this.loading;
+    console.log('loading di dio', loading)
     return loading.present();
   }
 

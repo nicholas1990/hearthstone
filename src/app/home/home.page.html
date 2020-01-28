@@ -31,11 +31,8 @@
               <ion-card-content class="ion-no-padding ion-no-margin card-wrapper">
 
                 <ion-list class="ion-no-padding ion-no-margin card-list " lines="none">
-
-                  <ion-avatar *ngFor="let card of this.homeService.cards$ | async; let i=index" class="no-lines">
-
+                  <ion-avatar *ngFor="let card of this.homeStore.cards$ | async; let i=index" class="no-lines">
                     <img  [ngClass]="createDeck?'':'disabled-image'"  src="{{card.image.it_IT}}" (click)="addCard(card)">
-
                   </ion-avatar>
                 </ion-list>
 
@@ -51,7 +48,7 @@
 
       </ion-col>
       <ion-col size="3" column-padding>
-        <ion-card class="create-deck    ion-no-margin" [ngClass]="createDeck?'active':''" color="old-mauve">
+        <ion-card [ngClass]="createDeck ? 'create-deck ion-no-margin active' : 'create-deck ion-no-margin'" color="old-mauve">
           <ion-card-header class="subtitle">
             <ion-card-subtitle>Nuovo mazzo</ion-card-subtitle>
           </ion-card-header>
@@ -70,6 +67,7 @@
           </ion-list>
           <ion-list class="slot-list " lines="none">
             <ion-item class="card-wrapper" lines="none" *ngFor="let card of deck.cards">
+
               <ion-label class="card-info">
                 <ion-item-sliding class="slidable-list">
                   <ion-item class="card-item">
@@ -91,7 +89,7 @@
                   </ion-item>
 
                   <ion-item-options side="end">
-                    <ion-item-option color="danger" (click)="unread(item)">
+                    <ion-item-option color="danger">
                       <ion-icon name="remove"></ion-icon>
                     </ion-item-option>
                   </ion-item-options>
@@ -99,6 +97,8 @@
               </ion-label>
               
             </ion-item>
+
+            <button (click)="saveDeck()">Save deck</button>
             
           </ion-list>
           
@@ -106,7 +106,8 @@
             <ion-text class="shadow-bottom">
             </ion-text>
               {{deck.counter }}/{{maxLength}}
-            </ion-text>
+          </ion-text>
+
         </ion-card>
       </ion-col>
     </ion-row>

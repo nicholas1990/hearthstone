@@ -1,27 +1,106 @@
-import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Card } from 'src/models/home/home';
+import { ActivatedRoute } from '@angular/router';
+import { EMPTY, of, Observable, forkJoin } from 'rxjs';
+import { tap, switchMap, catchError, take, map, filter, finalize } from 'rxjs/operators';
+import { ApiHomeService } from './api-home.service';
+import { HomeStoreService } from './home.store';
+import { LoadingHandlerService, NotificationHandlerService, StorageHandlerService } from '../../core/services/index';
+import { Authorization, Token, Cards, Card, LoggedUser } from '../../../models/home/home';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class HomeService {
 
-  private _cards$: Subject<Card[]> = new Subject<Card[]>()
-  cards$ : Observable<Card[]> = this._cards$.asObservable()
+  urlAttribute: string = `&class=druid`;
 
-  private _deck$: Subject<Card[]> = new Subject<Card[]>()
-  deck$ : Observable<Card[]> = this._deck$.asObservable()
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private apiService: ApiHomeService,
+    private authService: StorageHandlerService,
+    private homeStore: HomeStoreService,
+    public loadingHandlerService: LoadingHandlerService,
+    public notificationHandlerService: NotificationHandlerService,
+    private storageHandlerService: StorageHandlerService,
+  ) { }
 
-  constructor() { }
+  async getAuthorization() {
 
-   emitCards(card: Card[]){
-     this._cards$.next(card);
-   }
+    this.activatedRoute.queryParams.pipe(
+      take(1),
+      switchMap((parameters: Authorization) => this.apiService.authorization({code: parameters.code}).pipe(
+        tap(async (data: Token) => {
+          await this.storageHandlerService.setStorageToken(data);
+        }),
+        catchError((error) => {
+          this.notificationHandlerService.showError(error);
+          return EMPTY;  // OR of(null)
+        }),
+      )),
+      catchError(async (error) => {
+        this.notificationHandlerService.showError(error);
+        return EMPTY;
+      }),
+    ).toPromise();
 
-   addDeck(card: Card[]){
-     this._deck$.next(card)
+  }
 
-   }
+  getDataFromMultipleSource() {
+
+    let observable1: Observable<number> = this.getUserInfo();
+    let observable2: Observable<Card[]> = this.getCards();
+
+    return forkJoin([
+      observable1, 
+      observable2,
+    ]).subscribe((response) => {
+      this.homeStore.emitLoggedUser(response[0]);
+      this.homeStore.emitCards(response[1]);
+    }, (error) => {
+      this.notificationHandlerService.showError(error);
+      return EMPTY;
+    });
+
+  }
+
+  async getUserInfo() {
+
+    const token = await this.storageHandlerService.getStorageToken();
+
+    return this.apiService.getUserInfo(token).pipe(
+      take(1),
+      map((loggedUser: LoggedUser): number => {
+        return loggedUser.id;
+      })
+    );
+
+  }
+
+  getCards(attribute?:string): Observable<Card[]> {
+    console.log("getcards")
+    if(attribute){
+    this.urlAttribute = attribute
+    }
+    return this.apiService.getCards(this.urlAttribute).pipe(
+      take(1),
+      map((res: Cards): Card[] => {
+        return res.cards;
+      }),
+    );
+
+  }
+
+  getCardsFiltered(attribute:string): void {
+
+    this.getCards(attribute).subscribe(
+      (response) => {
+        this.homeStore.emitCards(response);
+      }, (error) => {
+        this.notificationHandlerService.showError(error);
+      }
+    );
+
+  }
 
 }

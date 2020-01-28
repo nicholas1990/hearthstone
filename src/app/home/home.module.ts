@@ -4,7 +4,7 @@ import { ManaFilterComponent } from './../components/mana-filter/mana-filter.com
 import { ManaFilterModule } from './../components/mana-filter/mana-filter.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, NavParams } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { InputModule } from './../components/input/input.module';
@@ -24,13 +24,16 @@ import { ModalSkinComponent } from '../components/modal-skin/modal-skin.componen
     RouterModule.forChild([
       {
         path: '',
-        component: HomePage
+        component: HomePage,
       }
     ])
   
   ],
   declarations: [HomePage],
-  entryComponents:[ManaFilterComponent,SkinFilterComponent,ModalSkinComponent]
-  
+  entryComponents:[
+    ManaFilterComponent,
+    SkinFilterComponent,
+    ModalSkinComponent,
+  ]
 })
 export class HomePageModule {}

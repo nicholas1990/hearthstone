@@ -1,12 +1,10 @@
-import { Cards } from './../../../models/home/home';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { Authorization, Token } from '../../../models/home/home';
+import { Observable } from 'rxjs';
+import { StorageHandlerService } from '../../core/services/index';
+import { Authorization, Token, Cards } from '../../../models/home/home';
 import { environment } from './../../../environments/environment';
 
-import { Observable } from 'rxjs';
-import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +13,7 @@ export class ApiHomeService {
 
   allCards = `${environment.hearthstone}cards?&pageSize=8`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private storage: StorageHandlerService) { }
 
   authorization(parameters: Authorization): Observable<Token> {
 
@@ -29,24 +27,44 @@ export class ApiHomeService {
       .append('Authorization', 'Basic ' + btoa(authorization))
       .append('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.post<Token>(environment.token_url, null, {params, headers});
+    return this.http.post<Token>(environment.token_url, null, {
+      params, 
+      headers
+    });
   }
 
-  getCards(attribute?:any) {
-    const value = attribute
-    console.log(value)
+  /**
+   * Ritorna le informazioni riguardanti l'utente loggato.
+   */
+  getUserInfo(token: Token) {
+    
+    const userInfo = `https://eu.battle.net/oauth/userinfo`;
+    const authorization = `Bearer ${token.access_token}`;
+
+    console.log('authorization ', authorization);
     const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + 'EUeFOmnUcMDcRfetl1RAJliAcw6ACPuro2')
+      .append('Authorization', authorization)
       .append('Content-Type', 'application/x-www-form-urlencoded');
-    if(value){
-      return this.http.get<Cards>(this.allCards+value, {
-        headers:headers,
-      });
-    }else{
-      return this.http.get<Cards>(this.allCards, {
-        headers:headers,
-      });
-    }
+
+    return this.http.get<any>(userInfo, {
+      headers,
+    });
+
+  }
+
+  getCards(attribute?: number | string) {
+
+    console.log(typeof attribute);
+
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Bearer ' + 'EU1C1VJo6Lh2brX65cNBzgZ2ltJ4FyQaw0')
+      .append('Content-Type', 'application/x-www-form-urlencoded');
+
+    const url = `${this.allCards}${attribute}`
+    
+    return this.http.get<Cards>(url, {
+      headers,
+    });
 
   }
 }
