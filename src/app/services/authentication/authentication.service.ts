@@ -1,40 +1,63 @@
+import { NotificationHandlerService } from './../../core/services/notification/notification-handler.service';
+import { LoadingHandlerService } from './../../core/services/loading/loading-handler.service';
+import { AuthenticationStoreService } from './authentication.store';
+import { StorageHandlerService } from './../../core/services/storage/storage-handler.service';
+import { ActivatedRoute } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { Token } from 'src/models/home/home';
+import { Observable, BehaviorSubject, forkJoin, EMPTY } from 'rxjs';
+import { Token, Authorization, Card, LoggedUser } from 'src/models/home/home';
+import { take, switchMap, tap, catchError, map } from 'rxjs/operators';
+import { ApiAuthenticationService } from './api-authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  private _token$: BehaviorSubject<Token> = new BehaviorSubject(null);
-  token$: Observable<Token> = this._token$.asObservable();
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private apiService: ApiAuthenticationService,
+    private authenticationStore: AuthenticationStoreService,
+    public loadingHandlerService: LoadingHandlerService,
+    public notificationHandlerService: NotificationHandlerService,
+    private storageHandlerService: StorageHandlerService,
+  ) { }
 
-  constructor(private storage: Storage) { }
+  async getAuthorization() {
 
-  // emitToken(value: Token): void {
-  //   this._token$.next(value);
-  // }
+    this.activatedRoute.queryParams.pipe(
+      take(1),
+      switchMap((parameters: Authorization) => this.apiService.authorization({code: parameters.code}).pipe(
+        tap(async (data: Token) => {
+          await this.storageHandlerService.setStorageToken(data);
+        }),
+        catchError((error) => {
+          this.notificationHandlerService.showError(error);
+          return EMPTY;  // OR of(null)
+        }),
+      )),
+      catchError(async (error) => {
+        this.notificationHandlerService.showError(error);
+        return EMPTY;
+      }),
+    ).toPromise();
 
-  async getStorageToken(): Promise<Token> {
-    const token = await this.storage.get('token');
-    return token;
-    // return this.storage.get('token').then((val: Token) => {
-    //     return val.access_token;
-    //   }, () => {
-    //     return null;
-    //   }
-    // );
   }
 
-  async setStorageToken(token?: Token): Promise<void> {
-    await this.storage.set('token', token);
-    this._token$.next(token);
-  }
-  
-  isAuthenticated() {
-    return this._token$.value;
+
+   async getUserInfo() {
+
+    const token = await this.storageHandlerService.getStorageToken();
+
+    return this.apiService.getUserInfo(token).pipe(
+      take(1),
+      map((loggedUser: LoggedUser): number => {
+        return loggedUser.id;
+      })
+    );
+
   }
 
 }
+

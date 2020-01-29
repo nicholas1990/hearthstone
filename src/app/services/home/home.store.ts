@@ -7,8 +7,7 @@ import { Card, Deck } from 'src/models/home/home';
 })
 export class HomeStoreService {
 
-  private _loggedUser$: Subject<number> = new Subject<number>();
-  loggedUser$: Observable<number> = this._loggedUser$.asObservable();
+  
 
   private _cards$: Subject<Card[]> = new Subject<Card[]>();
   cards$ : Observable<Card[]> = this._cards$.asObservable();
@@ -18,9 +17,7 @@ export class HomeStoreService {
 
   constructor() { }
 
-  emitLoggedUser(id: number) {
-    this._loggedUser$.next(id);
-  };
+  
 
   emitCards(card: Card[]){
     this._cards$.next(card);
