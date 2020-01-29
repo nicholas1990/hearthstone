@@ -45,8 +45,6 @@ export class HomePage {
   }
 
   constructor(
-    // private loadingControllerService: LoadingControllerService,
-    
     public modalController: ModalController,
     private homeService: HomeService,
     public homeStore: HomeStoreService,
@@ -66,8 +64,8 @@ export class HomePage {
 
     await this.loadingHandler.showLoading();
 
-    this.homeService.getAuthorization();
-    this.homeService.getDataFromMultipleSource();
+    await this.homeService.getAuthorization();
+    await this.homeService.getDataFromMultipleSource();
 
     this.loadingHandler.dismissLoading();
 
@@ -80,14 +78,10 @@ export class HomePage {
   }
 
   // async onClick(): Promise<Token> {
-
-
-
   //   // let control =  this.authService.isAuthenticated()
   //   // console.log(control)
   //   // const info = await this.authService.getStorageToken();
   //   // return of();
-
   // }
 
   async presentModalSkin() {

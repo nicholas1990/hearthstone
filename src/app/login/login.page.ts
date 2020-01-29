@@ -35,11 +35,12 @@ export class LoginPage {
       const url = environment.authorize_url;
       const responsetype = `code`;
       const redirectURL = environment.redirect_uri;
-      return `${url}?response_type=${responsetype}&client_id=${environment.client_id}&redirect_uri=${redirectURL}`;
+      return `${url}?response_type=${responsetype}&client_id=${environment.client_id}&redirect_uri=${redirectURL}/home`;
     };
     this.loginURL = getLoginUrl();
     
   }
+  
   openBrowser(){
     this.code = "ONCLICK"
     const browser = this.iab.create(this.loginURL,'_blank');

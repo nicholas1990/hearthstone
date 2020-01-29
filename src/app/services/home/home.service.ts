@@ -46,9 +46,9 @@ export class HomeService {
 
   }
 
-  getDataFromMultipleSource() {
+  async getDataFromMultipleSource() {
 
-    let observable1: Observable<number> = this.getUserInfo();
+    let observable1: Observable<number> = await this.getUserInfo();
     let observable2: Observable<Card[]> = this.getCards();
 
     return forkJoin([

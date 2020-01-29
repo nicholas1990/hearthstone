@@ -15,7 +15,7 @@
               </ion-item>
               <ion-item lines="none">
                 <ion-label>
-                  <ion-button color="bg-secondary" (click)="onClick()">
+                  <ion-button color="bg-secondary" (click)="presentPopoverMana()">
                     Filtri
                   </ion-button>
                 </ion-label>
@@ -32,8 +32,8 @@
               <ion-card-content class="ion-no-padding ion-no-margin card-wrapper">
 
                 <ion-list class="ion-no-padding ion-no-margin card-list " lines="none">
-                  <ion-avatar *ngFor="let card of this.homeStore.cards$ | async; let i=index" class="no-lines">
-                    <img  [ngClass]="createDeck?'':'disabled-image'"  src="{{card.image.it_IT}}" (click)="addCard(card)">
+                  <ion-avatar *ngFor="let card of homeStore.cards$ | async; let i=index" class="no-lines">
+                    <img [ngClass]="{'disabled-image': !createDeck}" src="{{card.image.it_IT}}" (click)="addCard(card)">
                   </ion-avatar>
                 </ion-list>
 
