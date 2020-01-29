@@ -98,14 +98,14 @@
 
             </ion-item>
 
-            <button (click)="saveDeck()">Save deck</button>
+            
 
           </ion-list>
 
           <ion-text class="card-counter " [ngClass]="deck.cards.length>6? 'shadow':''">
             <ion-text class="shadow-bottom">
             </ion-text>
-            {{deck.counter }}/{{maxLength}}
+            {{deck.counter }}/{{maxLength}} <button *ngIf="maxLength == deck.counter" (click)="saveDeck()">Save deck</button>
           </ion-text>
 
         </ion-card>
