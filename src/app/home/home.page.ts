@@ -54,6 +54,7 @@ export class HomePage {
     private events: Events,
   ) {
 
+    screen.orientation.lock('landscape');
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
