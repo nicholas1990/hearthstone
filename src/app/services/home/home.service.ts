@@ -25,57 +25,36 @@ export class HomeService {
     private storageHandlerService: StorageHandlerService,
   ) { }
 
-  // async getAuthorization() {
+  async getDataFromMultipleSource() {
 
-  //   this.activatedRoute.queryParams.pipe(
-  //     take(1),
-  //     switchMap((parameters: Authorization) => this.apiService.authorization({code: parameters.code}).pipe(
-  //       tap(async (data: Token) => {
-  //         await this.storageHandlerService.setStorageToken(data);
-  //       }),
-  //       catchError((error) => {
-  //         this.notificationHandlerService.showError(error);
-  //         return EMPTY;  // OR of(null)
-  //       }),
-  //     )),
-  //     catchError(async (error) => {
-  //       this.notificationHandlerService.showError(error);
-  //       return EMPTY;
-  //     }),
-  //   ).toPromise();
+    const observable1: Observable<number> = await this.getUserInfo();
+    const observable2: Observable<Card[]> = this.getCards();
 
-  // }
+    return forkJoin([
+      observable1, 
+      observable2,
+    ]).subscribe((response) => {
+      this.homeStore.emitLoggedUser(response[0]);
+      this.homeStore.emitCards(response[1]);
+    }, (error) => {
+      this.notificationHandlerService.showError(error);
+      return EMPTY;
+    });
 
-  // async getDataFromMultipleSource() {
+  }
 
-  //   let observable1: Observable<number> = await this.getUserInfo();
-  //   let observable2: Observable<Card[]> = this.getCards();
+  async getUserInfo() {
 
-  //   return forkJoin([
-  //     observable1, 
-  //     observable2,
-  //   ]).subscribe((response) => {
-  //     this.homeStore.emitLoggedUser(response[0]);
-  //     this.homeStore.emitCards(response[1]);
-  //   }, (error) => {
-  //     this.notificationHandlerService.showError(error);
-  //     return EMPTY;
-  //   });
+    const token = await this.storageHandlerService.getStorageToken();
 
-  // }
+    return this.apiService.getUserInfo(token).pipe(
+      take(1),
+      map((loggedUser: LoggedUser): number => {
+        return loggedUser.id;
+      })
+    );
 
-  // async getUserInfo() {
-
-  //   const token = await this.storageHandlerService.getStorageToken();
-
-  //   return this.apiService.getUserInfo(token).pipe(
-  //     take(1),
-  //     map((loggedUser: LoggedUser): number => {
-  //       return loggedUser.id;
-  //     })
-  //   );
-
-  // }
+  }
 
   getCards(attribute?:string): Observable<Card[]> {
     console.log("getcards")

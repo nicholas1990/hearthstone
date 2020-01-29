@@ -11,7 +11,7 @@ export class RouteGuardService implements CanActivate  {
   constructor(private authService: AuthenticationService, private router: Router ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let control = this.authService.isAuthenticated();
+    let control = '';
     console.log(control);
     if (control) {
       console.log("la funzione è true")
@@ -20,6 +20,7 @@ export class RouteGuardService implements CanActivate  {
       return true;
       //this.router.navigate(['login']);
     }
+  
    }
   
 }
