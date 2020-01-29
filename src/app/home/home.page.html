@@ -9,7 +9,7 @@
               <ion-item lines="none">
                 <ion-label>
                   <ion-button color="bg-secondary" (click)="presentPopoverSkin()" [disabled]="createDeck">
-                    Classi  
+                    Classi
                   </ion-button>
                 </ion-label>
               </ion-item>
@@ -21,7 +21,7 @@
                 </ion-label>
               </ion-item>
             </ion-list>
-            
+
           </ion-card-header>
 
           <ion-card-content class="ion-no-padding">
@@ -32,7 +32,7 @@
               <ion-card-content class="ion-no-padding ion-no-margin card-wrapper">
 
                 <ion-list class="ion-no-padding ion-no-margin card-list " lines="none">
-                  <ion-avatar *ngFor="let card of homeStore.cards$ | async; let i=index" class="no-lines">
+                  <ion-avatar *ngFor="let card of homeStore.cards$ | async;" class="no-lines">
                     <img [ngClass]="{'disabled-image': !createDeck}" src="{{card.image.it_IT}}" (click)="addCard(card)">
                   </ion-avatar>
                 </ion-list>
@@ -49,7 +49,8 @@
 
       </ion-col>
       <ion-col size="3" column-padding>
-        <ion-card [ngClass]="createDeck ? 'create-deck ion-no-margin active' : 'create-deck ion-no-margin'" color="old-mauve">
+        <ion-card [ngClass]="createDeck ? 'create-deck ion-no-margin active' : 'create-deck ion-no-margin'"
+          color="old-mauve">
           <ion-card-header class="subtitle">
             <ion-card-subtitle>Nuovo mazzo</ion-card-subtitle>
           </ion-card-header>
@@ -98,13 +99,13 @@
             </ion-item>
 
             <button (click)="saveDeck()">Save deck</button>
-            
+
           </ion-list>
 
           <ion-text class="card-counter " [ngClass]="deck.cards.length>6? 'shadow':''">
             <ion-text class="shadow-bottom">
             </ion-text>
-              {{deck.counter }}/{{maxLength}}
+            {{deck.counter }}/{{maxLength}}
           </ion-text>
 
         </ion-card>
