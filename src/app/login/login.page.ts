@@ -60,6 +60,8 @@ export class LoginPage {
         browser.close();
         const token = await this.authService.getAuthorization(this.code);
 
+        console.log("il porco di dio e la madonna santissima")
+
         // let token;
         // this.authService.getAuthorization().then(res => {
         //   token = res;
