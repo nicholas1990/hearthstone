@@ -3,9 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { environment } from './../../environments/environment';
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { tap, map } from 'rxjs/operators';
-import { ModalController } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
@@ -42,6 +39,7 @@ export class LoginPage {
       return `${url}?response_type=${responsetype}&client_id=${environment.client_id}&redirect_uri=${redirectURL}`;
     };
     this.loginURL = getLoginUrl();
+    screen.orientation.lock('portrait');
   }
 
   ionViewDidEnter(): void {
@@ -52,10 +50,13 @@ export class LoginPage {
     const browser = this.iab.create(this.loginURL, '_blank');  // open in-app browser
 
     browser.on('loadstart').subscribe(async event => {
+      console.log("evento browser : ");
+      console.log(JSON.stringify(event));
       const url = event.url;
       const urlTrim = url.split('code=');
       this.code = urlTrim[1];
-
+      console.log("code: ");
+      console.log(this.code);
       if (this.code) {
         browser.close();
         const token = await this.authService.getAuthorization(this.code);
