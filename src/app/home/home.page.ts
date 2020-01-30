@@ -90,7 +90,9 @@ export class HomePage {
       component: ModalSkinComponent
     });
     this.events.subscribe('selectSkinEvent', res => {
+      if(res.name){
       this.createDeck = res ? this.createDeck = true : false;
+      }
       this.skinCover= res.path;
       this.selectedSkin(res.name);
     });
@@ -168,7 +170,7 @@ export class HomePage {
     this.validateUrl(page)
   }
   nextPage(){
-    this.paginate++
+    ++this.paginate;
     const page = `&page=${this.paginate}`
     this.validate.page = page
     this.validateUrl(page)

@@ -41,7 +41,8 @@ export class ApiHomeService {
     const userInfo = `https://eu.battle.net/oauth/userinfo`;
     const authorization = `Bearer ${token.access_token}`;
 
-    console.log('authorization ', authorization);
+    console.log('authorization ');
+    console.log(JSON.stringify(authorization));
     const headers = new HttpHeaders()
       .append('Authorization', authorization)
       .append('Content-Type', 'application/x-www-form-urlencoded');
@@ -52,12 +53,15 @@ export class ApiHomeService {
 
   }
 
-  getCards(attribute?: number | string) {
+  getCards(token:Token, attribute?: number | string) {
 
     console.log(typeof attribute);
 
+    const authorization = `Bearer ${token.access_token}`;
+
+
     const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + 'EU1C1VJo6Lh2brX65cNBzgZ2ltJ4FyQaw0')
+      .append('Authorization', authorization)
       .append('Content-Type', 'application/x-www-form-urlencoded');
 
     const url = `${this.allCards}${attribute}`

@@ -14,6 +14,7 @@ import { Authorization, Token, Cards, Card, LoggedUser } from '../../../models/h
 export class HomeService {
 
   urlAttribute: string = `&class=druid`;
+  tokenAccess: Token;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -27,8 +28,9 @@ export class HomeService {
 
   async getDataFromMultipleSource() {
 
+
     const observable1: Observable<number> = await this.getUserInfo();
-    const observable2: Observable<Card[]> = this.getCards();
+    const observable2: Observable<Card[]> = await this.getCards();
 
     return forkJoin([
       observable1, 
@@ -45,9 +47,8 @@ export class HomeService {
 
   async getUserInfo() {
 
-    const token = await this.storageHandlerService.getStorageToken();
-
-    return this.apiService.getUserInfo(token).pipe(
+    this.tokenAccess = await this.storageHandlerService.getStorageToken();
+    return this.apiService.getUserInfo(this.tokenAccess).pipe(
       take(1),
       map((loggedUser: LoggedUser): number => {
         return loggedUser.id;
@@ -56,12 +57,13 @@ export class HomeService {
 
   }
 
-  getCards(attribute?:string): Observable<Card[]> {
+   getCards(attribute?:string): Observable<Card[]> {
+    const token =  this.storageHandlerService.getStorageToken();
     console.log("getcards")
     if(attribute){
     this.urlAttribute = attribute
     }
-    return this.apiService.getCards(this.urlAttribute).pipe(
+    return this.apiService.getCards(this.tokenAccess,this.urlAttribute).pipe(
       take(1),
       map((res: Cards): Card[] => {
         return res.cards;

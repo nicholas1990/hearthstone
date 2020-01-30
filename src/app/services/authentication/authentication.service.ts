@@ -29,6 +29,7 @@ export class AuthenticationService {
     return this.apiService.authorization({code}).pipe(
       tap(async (data: Token) => {
         console.log('data token: ', data);
+        console.log(JSON.stringify(data));
         await this.storageHandlerService.setStorageToken(data);
       }),
       catchError(async (error) => {
