@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import { PopoverController, Events, ModalController } from '@ionic/angular';
-import { Token, Authorization, LoggedUser, Cards, Card, urlAttr, Deck } from './../../models/home/home';
-import { ApiHomeService } from '../services/home/api-home.service';
-import { AuthenticationService } from '../services/authentication/authentication.service';
 import { HomeStoreService } from '../services/home/home.store';
 import { HomeService } from '../services/home/home.service';
-// import { NotificationHandlerService } from '../core/services/notification/notification-handler.service';
-// import { LoadingControllerService } from '../core/services';
-import { LoadingHandlerService, NotificationHandlerService } from '../core/services/index';
+import { LoadingHandlerService } from '../core/services/index';
 import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
+import { Token, Card, Deck, urlAttr, } from './../../models/home/home';
 import { ModalSkinComponent } from './../components/modal-skin/modal-skin.component';
 import { SkinFilterComponent } from './../components/skin-filter/skin-filter.component';
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
@@ -150,14 +146,15 @@ export class HomePage {
     }
     
   }
+
   removeCard(card:Card){
     console.log(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 2).length)
     if(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 2).length == 1){
-      card.counter = 1
-      this.deck.counter--
+      card.counter = 1;
+      this.deck.counter--;
     }else if(this.deck.cards.filter(element => element.id == card.id).length == 1){  
       card.counter = 0;
-      this.deck.counter--
+      this.deck.counter--;
       this.deck.cards = this.deck.cards.filter(element => element.id != card.id);
     }else{
       console.log("errore")
@@ -236,10 +233,9 @@ export class HomePage {
     }
     console.log('asddsasad', this.urlAttribute)
     this.homeService.getCardsFiltered(this.urlAttribute);
-
       
-      //console.log('url: '+this.urlAttribute)
-      //console.log(this.validate)
+    //console.log('url: '+this.urlAttribute)
+    //console.log(this.validate)
     
     // this.apiService.getCards(this.urlAttribute).pipe(
     //   take(1),
