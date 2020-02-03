@@ -1,3 +1,5 @@
+import { Skin } from './../../../models/home/home';
+import { HomeStoreService } from './../../services/home/home.store';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, Events } from '@ionic/angular';
 
@@ -7,7 +9,7 @@ import { ModalController, Events } from '@ionic/angular';
   styleUrls: ['./modal-skin.component.scss'],
 })
 export class ModalSkinComponent implements OnInit {
-  skin: Object = [
+  skins: Skin[] = [
     {
       name:'druid',
       path: '../../../assets/img/druid.png',
@@ -43,12 +45,12 @@ export class ModalSkinComponent implements OnInit {
     {
       name:'priest',
       path: '../../../assets/img/priest.png',
-    },
-    
-  ]
+    }
+  ];
 
 
-  constructor(public modalController: ModalController,private events: Events) { }
+  constructor(public modalController: ModalController,private events: Events,
+    public homeStore : HomeStoreService) { }
 
   ngOnInit() {}
 
@@ -57,8 +59,9 @@ export class ModalSkinComponent implements OnInit {
     return await this.modalController.dismiss();
   }
 
-  selectSkin(skin:string){
-    this.events.publish('selectSkinEvent',skin);
+  selectSkin(skin:Skin){
+    //this.events.publish('selectSkinEvent',skin);
+    this.homeStore.emitSkin(skin)
     return  this.modalController.dismiss();
 
   }

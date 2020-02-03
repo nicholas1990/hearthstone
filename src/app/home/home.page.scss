@@ -178,7 +178,7 @@ ion-list{
             }
             .slot-list{
                 display: block;
-                height: calc( 75vh - 10px );
+                height: calc( 71vh - 10px );
                 overflow: scroll;
                 .card-wrapper{
                     padding:0;
@@ -267,7 +267,7 @@ ion-list{
                 display: flex;
                 align-items: center;
                 justify-content: space-around;
-                height: calc(10vh - 10px);
+                height: calc(14vh - 10px);
                 &.shadow{
                     .shadow-bottom{
                         top: 2px;
@@ -298,4 +298,7 @@ ion-list{
 
     .disabled-image{
         pointer-events: none;
+    }
+    .btn-hide{
+        display: none;
     }

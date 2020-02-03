@@ -59,7 +59,6 @@ export class ApiHomeService {
 
     const authorization = `Bearer ${token.access_token}`;
 
-
     const headers = new HttpHeaders()
       .append('Authorization', authorization)
       .append('Content-Type', 'application/x-www-form-urlencoded');
