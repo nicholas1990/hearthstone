@@ -32,10 +32,10 @@ export class HomeStoreService {
   }
 
   emitCards(cards: Card[]){
-    // this._cards$.next(card);
-    this.cards = [
-      ...cards
-    ];
+    this._cards$.next(cards);
+    // this.cards = [
+    //   ...cards
+    // ];
   }
 
   emitDeck(deck: Deck) {
