@@ -61,7 +61,6 @@ export class HomePage {
 
     await this.loadingHandler.showLoading();
 
-    // await this.homeService.getAuthorization();
     await this.homeService.getDataFromMultipleSource();
 
     this.loadingHandler.dismissLoading();

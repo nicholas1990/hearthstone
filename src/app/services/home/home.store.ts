@@ -13,6 +13,8 @@ export class HomeStoreService {
   private _cards$: Subject<Card[]> = new Subject<Card[]>();
   cards$: Observable<Card[]> = this._cards$.asObservable();
 
+  cards: Card[] = [];
+
   private _deck$: Subject<Deck> = new Subject<Deck>();
   deck$: Observable<Deck> = this._deck$.asObservable();
 
@@ -22,8 +24,11 @@ export class HomeStoreService {
     this._loggedUser$.next(id);
   }
 
-  emitCards(card: Card[]){
-    this._cards$.next(card);
+  emitCards(cards: Card[]){
+    // this._cards$.next(card);
+    this.cards = [
+      ...cards
+    ];
   }
 
   emitDeck(deck: Deck) {
