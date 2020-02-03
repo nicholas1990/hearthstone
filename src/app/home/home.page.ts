@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { PopoverController, Events, ModalController } from '@ionic/angular';
+<<<<<<< HEAD
 import { Token, Authorization, LoggedUser, Cards, Card, urlAttr, Deck, Skin } from './../../models/home/home';
+=======
+>>>>>>> 524333246a33c2ab7739867ab52f94ee85bc5063
 import { HomeStoreService } from '../services/home/home.store';
 import { HomeService } from '../services/home/home.service';
-// import { NotificationHandlerService } from '../core/services/notification/notification-handler.service';
-// import { LoadingControllerService } from '../core/services';
-import { LoadingHandlerService, NotificationHandlerService } from '../core/services/index';
+import { LoadingHandlerService } from '../core/services/index';
 import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
+import { Token, Card, Deck, urlAttr, } from './../../models/home/home';
 import { ModalSkinComponent } from './../components/modal-skin/modal-skin.component';
 import { SkinFilterComponent } from './../components/skin-filter/skin-filter.component';
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
@@ -165,14 +167,15 @@ export class HomePage {
     }
     
   }
+
   removeCard(card:Card){
     console.log(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 2).length)
     if(this.deck.cards.filter(element => element.id == card.id ).filter(element => element.counter == 2).length == 1){
-      card.counter = 1
-      this.deck.counter--
+      card.counter = 1;
+      this.deck.counter--;
     }else if(this.deck.cards.filter(element => element.id == card.id).length == 1){  
       card.counter = 0;
-      this.deck.counter--
+      this.deck.counter--;
       this.deck.cards = this.deck.cards.filter(element => element.id != card.id);
     }else{
       console.log("errore")
@@ -253,12 +256,32 @@ export class HomePage {
     if(this.validate.page != ''){
       this.urlAttribute = this.urlAttribute+`&page=${this.validate.page}`
     }
+<<<<<<< HEAD
 
     const card = await this.homeService.getCardsFiltered(this.urlAttribute);
     card.pipe(take(1)).subscribe(
       (res) => this.homeStore.emitCards(res)
     );
 
+=======
+    console.log('asddsasad', this.urlAttribute)
+    this.homeService.getCardsFiltered(this.urlAttribute);
+      
+    //console.log('url: '+this.urlAttribute)
+    //console.log(this.validate)
+    
+    // this.apiService.getCards(this.urlAttribute).pipe(
+    //   take(1),
+    //   map((res: Cards): Card[] => {
+    //     return res.cards;
+    //   }),
+    //   tap((res: Card[]) => {
+    //     console.log(res)
+    //     this.homeStore.emitCards(res)
+    //     //this.cards = res.cards
+    //   })        
+    // ).subscribe();
+>>>>>>> 524333246a33c2ab7739867ab52f94ee85bc5063
   }
   
   saveDeck(): void {
