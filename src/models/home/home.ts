@@ -126,6 +126,11 @@ export interface Deck {
   counter?: number;
 }
 
+export interface Skin {
+  name: string;
+  path: string;
+}
+
 export interface LoggedUser {
   sub: string,
   id: number,

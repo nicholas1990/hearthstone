@@ -4,7 +4,7 @@ import { AuthenticationService } from '../services/authentication/authentication
 import { environment } from './../../environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -22,7 +22,8 @@ export class LoginPage {
     private authService: AuthenticationService,
     private iab: InAppBrowser,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private statusBar : StatusBar,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -40,6 +41,13 @@ export class LoginPage {
     };
     this.loginURL = getLoginUrl();
     screen.orientation.lock('portrait');
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady() {
+        console.log(statusBar);
+    }
+    statusBar.hide();
+
   }
 
   ionViewDidEnter(): void {

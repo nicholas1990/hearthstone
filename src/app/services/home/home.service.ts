@@ -28,7 +28,6 @@ export class HomeService {
 
   async getDataFromMultipleSource() {
 
-
     const observable1: Observable<number> = await this.getUserInfo();
     const observable2: Observable<Card[]> = await this.getCards();
 
@@ -57,8 +56,8 @@ export class HomeService {
 
   }
 
-   getCards(attribute?:string): Observable<Card[]> {
-    const token =  this.storageHandlerService.getStorageToken();
+  async getCards(attribute?:string) {
+    this.tokenAccess = await this.storageHandlerService.getStorageToken();
     console.log("getcards")
     if(attribute){
     this.urlAttribute = attribute
@@ -72,15 +71,31 @@ export class HomeService {
 
   }
 
-  getCardsFiltered(attribute:string): void {
+  async getCardsFiltered(attribute:string) {
 
-    this.getCards(attribute).subscribe(
-      (response) => {
-        this.homeStore.emitCards(response);
-      }, (error) => {
-        this.notificationHandlerService.showError(error);
-      }
+    this.tokenAccess = await this.storageHandlerService.getStorageToken();
+
+    if (attribute) {
+      this.urlAttribute = attribute;
+    }
+    return this.apiService.getCards(this.tokenAccess,this.urlAttribute).pipe(
+      take(1),
+      map((res: Cards): Card[] => {
+        return res.cards;
+      }),
     );
+
+    // .pipe(
+    //   take(1),
+    //   finalize(() => console.log('Sequence complete'))
+    // ).subscribe(
+    //   (response) => {
+    //     console.log('response: ', response);
+    //     this.homeStore.emitCards(response);
+    //   }, (error) => {
+    //     this.notificationHandlerService.showError(error);
+    //   }
+    // );
 
   }
 

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { PopoverController, Events, ModalController } from '@ionic/angular';
-import { Token, Authorization, LoggedUser, Cards, Card, urlAttr, Deck } from './../../models/home/home';
-import { ApiHomeService } from '../services/home/api-home.service';
-import { AuthenticationService } from '../services/authentication/authentication.service';
+import { Token, Authorization, LoggedUser, Cards, Card, urlAttr, Deck, Skin } from './../../models/home/home';
 import { HomeStoreService } from '../services/home/home.store';
 import { HomeService } from '../services/home/home.service';
 // import { NotificationHandlerService } from '../core/services/notification/notification-handler.service';
@@ -12,6 +10,8 @@ import { myEnterAnimation, myLeaveAnimation } from '../core/animation';
 import { ModalSkinComponent } from './../components/modal-skin/modal-skin.component';
 import { SkinFilterComponent } from './../components/skin-filter/skin-filter.component';
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
+import { tap, take } from 'rxjs/operators';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +23,7 @@ export class HomePage {
   // cards$: Observable<Cards>;
   cards : Array<Card>;
   paginate: number = 1;
-  mana: string = '*';
+  mana: string | number = '*';
   maxLength: number = 30;
   selectSkin: string = 'druid';
   urlAttribute: string = `&class=druid`;
@@ -38,6 +38,8 @@ export class HomePage {
     counter: 0,
   }
 
+  current: Card[]= [];
+
   private validate : urlAttr = {
     class: 'druid',
     manaCost: '',
@@ -51,9 +53,9 @@ export class HomePage {
     // public authService: AuthenticationService,
     private loadingHandler: LoadingHandlerService,
     public popoverController: PopoverController,
-    private events: Events,
+    private statusBar : StatusBar,
   ) {
-
+    statusBar.hide()
     screen.orientation.lock('landscape');
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
@@ -70,12 +72,6 @@ export class HomePage {
 
     this.loadingHandler.dismissLoading();
 
-    // const getInfo = async (): Promise<Token> => {
-    //   return await this.authService.getStorageToken();
-    // };
-    // const asd = await getInfo();
-    // console.log('token ', asd.access_token);
-
   }
 
   // async onClick(): Promise<Token> {
@@ -89,13 +85,24 @@ export class HomePage {
     const modal = await this.modalController.create({
       component: ModalSkinComponent
     });
-    this.events.subscribe('selectSkinEvent', res => {
-      if(res.name){
-      this.createDeck = res ? this.createDeck = true : false;
+    // this.events.subscribe('selectSkinEvent', res:Skin => {
+    //   if(res.name){
+    //   this.createDeck = res ? this.createDeck = true : false;
+    //   }
+    //   this.skinCover= res.path;
+    //   this.selectedSkin(res.name);
+    // });
+    this.homeStore.skin$.pipe(
+      take(1)
+    ).subscribe(
+      res => {
+        if(res.name){
+          this.createDeck = res ? this.createDeck = true : false;
+        }
+        this.skinCover= res.path;
+        this.selectedSkin(res.name);
       }
-      this.skinCover= res.path;
-      this.selectedSkin(res.name);
-    });
+    )
     return await modal.present();
   }
   async presentPopoverMana(ev: any) {
@@ -108,10 +115,11 @@ export class HomePage {
       leaveAnimation:myLeaveAnimation,
       translucent: true
     });
-    this.events.subscribe('selectManaEvent', res => {
-      this.filterMana(res)
-      this.events.unsubscribe('selectManaEvent')
-    });
+    this.homeStore.mana$.pipe(
+      take(1)
+    ).subscribe(
+       res => this.filterMana(res)
+    );
     
     return await popover.present();
   }
@@ -125,10 +133,17 @@ export class HomePage {
       leaveAnimation:myLeaveAnimation,
       translucent: true
     });
-    this.events.subscribe('selectSkinEvent', res => {
-      this.filterSkin(res)
-      this.events.unsubscribe('selectSkinEvent')
-    });
+    // this.events.subscribe('selectSkinEvent', (res:Skin) => {
+    //   this.filterSkin(res.name)
+    //   this.events.unsubscribe('selectSkinEvent')
+    // });
+    this.homeStore.skin$.pipe(
+      take(1)
+    ).subscribe(
+      res => {
+       this.filterSkin(res.name);
+      }
+    )
   
     return await popover.present();
   }
@@ -163,47 +178,51 @@ export class HomePage {
       console.log("errore")
     }
   }
-  backPage(){
+  async backPage(){
     this.paginate--
     const page = `&page=${this.paginate}`
     this.validate.page = page
-    this.validateUrl(page)
+    await this.validateUrl(page);
   }
-  nextPage(){
-    ++this.paginate;
+  async nextPage(){
+    this.paginate++;
     const page = `&page=${this.paginate}`
     this.validate.page = page
-    this.validateUrl(page)
+    await this.validateUrl(page);
   }
-  filterSkin(skin?:string){
+  async filterSkin(skin?:string){
     this.selectSkin = skin
     const skinValue = `&class=${skin},neutral&page=1&manaCost=*`;
     this.validate.page = '1';
     this.paginate=1;
     this.mana='*';
-    this.validateUrl(skinValue)
+    await this.validateUrl(skinValue)
   }
-  filterMana(mana?:string){
+  async filterMana(mana?: number | string){
     this.mana = mana;
     const manaValue = `&manaCost=${mana}&page=1`;
     this.validate.page = '1';
     this.paginate=1;
-    this.validateUrl(manaValue)
+    await this.validateUrl(manaValue)
   }
-  selectedSkin(skin:string){
+  async selectedSkin(skin:string){
     this.selectSkin = skin
-    const skinValue = `&class=${skin},neutral&page=1`;
+    const skinValue = `&class=${skin},neutral&page=1&manaCost=*`;
     this.validate.page = '1';
     this.paginate=1;
-    this.validateUrl(skinValue)
-
+    this.mana='*';
+    await this.validateUrl(skinValue)
   }
-  validateUrl(attribute:string){
+  deleteDeck(){
+    this.createDeck = false;
+    console.log(this.createDeck)
+  }
+  async validateUrl(attribute:string): Promise<void> {
 
     console.log('attribue:', attribute);
     //concateno gli attributi all'url
-    this.urlAttribute = this.urlAttribute+attribute
-    let splitUrl = this.urlAttribute.split('&')
+    this.urlAttribute = this.urlAttribute+attribute;
+    let splitUrl = this.urlAttribute.split('&');
     
     splitUrl.forEach(element => {
       let x = element.split('=')
@@ -234,24 +253,12 @@ export class HomePage {
     if(this.validate.page != ''){
       this.urlAttribute = this.urlAttribute+`&page=${this.validate.page}`
     }
-    console.log('asddsasad', this.urlAttribute)
-    this.homeService.getCardsFiltered(this.urlAttribute);
 
-      
-      //console.log('url: '+this.urlAttribute)
-      //console.log(this.validate)
-    
-    // this.apiService.getCards(this.urlAttribute).pipe(
-    //   take(1),
-    //   map((res: Cards): Card[] => {
-    //     return res.cards;
-    //   }),
-    //   tap((res: Card[]) => {
-    //     console.log(res)
-    //     this.homeStore.emitCards(res)
-    //     //this.cards = res.cards
-    //   })        
-    // ).subscribe();
+    const card = await this.homeService.getCardsFiltered(this.urlAttribute);
+    card.pipe(take(1)).subscribe(
+      (res) => this.homeStore.emitCards(res)
+    );
+
   }
   
   saveDeck(): void {

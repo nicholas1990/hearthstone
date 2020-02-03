@@ -3,7 +3,7 @@
   
   <ion-radio-group style="display: flex; padding: 10px 10px; align-items: center; flex-wrap: wrap;">
 
-    <ion-item class="mana-item" *ngFor="let s of skin" style="
+    <ion-item class="mana-item" *ngFor="let s of skins" style="
     height: 40px;    flex: 0 0 20%;">
       <ion-label class="p-relative ion-no-margin ion-no-padding" *ngIf="s.name == selectedSkin">
         <ion-avatar class="ion-no-margin ion-no-padding" style="height: 30px;
@@ -18,7 +18,7 @@
         width: 30px;">
           <img src="{{s.path}}">
         </ion-avatar>
-        <ion-radio  class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="filterSkin(s.name)" slot="start"  value="{{s.name}}"
+        <ion-radio  class="custom-mana-button ion-no-margin ion-no-padding" (ionSelect)="filterSkin(s)" slot="start"  value="{{s.name}}"
           ></ion-radio>
       </ion-label>
     </ion-item>

@@ -1,5 +1,6 @@
+import { Skin } from './../../../models/home/home';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject,  } from 'rxjs';
 import { Card, Deck } from 'src/models/home/home';
 
 @Injectable({
@@ -16,18 +17,32 @@ export class HomeStoreService {
   private _deck$: Subject<Deck> = new Subject<Deck>();
   deck$: Observable<Deck> = this._deck$.asObservable();
 
+  private _mana$: Subject<number | string> = new Subject<number | string>();
+  mana$: Observable<number | string> = this._mana$.asObservable();
+
+  private _skin$: Subject<Skin> = new Subject<Skin>();
+  skin$: Observable<Skin> = this._skin$.asObservable();
+
   constructor() { }
 
   emitLoggedUser(id: number) {
     this._loggedUser$.next(id);
   }
 
-  emitCards(card: Card[]){
-    this._cards$.next(card);
+  emitCards(cards: Card[]){
+    console.log('CARDS:', cards);
+    this._cards$.next(cards);
   }
 
   emitDeck(deck: Deck) {
     this._deck$.next(deck);
+  }
+
+  emitMana(mana: number | string) {
+    this._mana$.next(mana);
+  }
+  emitSkin(skin :Skin) {
+    this._skin$.next(skin);
   }
 
 }
