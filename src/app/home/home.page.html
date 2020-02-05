@@ -39,13 +39,14 @@
               <ion-card-content class="ion-no-padding ion-no-margin card-wrapper">
 
                 <ion-list class="ion-no-padding ion-no-margin card-list " lines="none">
-                  <ion-avatar *ngFor="let card of (homeStore.cards$ | async)" class="no-lines">
+                  <ion-avatar *ngFor="let card of (homeStore.cards$ | async); trackBy: getPageCards" class="no-lines">
                     <img [ngClass]="{'disabled-image': !createDeck}" src="{{card.image.it_IT}}" (click)="addCard(card)">
                   </ion-avatar>
                 </ion-list>
 
               </ion-card-content>
               <ion-label class="arrow-wrapper right-arrow">
+                <!-- to do *ngIf="paginate !== 51" -->
                 <img src="../../assets/img/arrow_right.png" (click)="nextPage()">
               </ion-label>
 

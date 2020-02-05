@@ -32,6 +32,7 @@ export class HomeStoreService {
   }
 
   emitCards(cards: Card[]){
+    console.log('CARDS:', cards);
     this._cards$.next(cards);
     // this.cards = [
     //   ...cards

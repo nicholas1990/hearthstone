@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
 import { PopoverController, Events, ModalController } from '@ionic/angular';
-<<<<<<< HEAD
-import { Token, Authorization, LoggedUser, Cards, Card, urlAttr, Deck, Skin } from './../../models/home/home';
-=======
->>>>>>> 524333246a33c2ab7739867ab52f94ee85bc5063
 import { HomeStoreService } from '../services/home/home.store';
 import { HomeService } from '../services/home/home.service';
 import { LoadingHandlerService } from '../core/services/index';
@@ -14,6 +10,7 @@ import { SkinFilterComponent } from './../components/skin-filter/skin-filter.com
 import { ManaFilterComponent } from './../components/mana-filter/mana-filter.component';
 import { tap, take } from 'rxjs/operators';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +20,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 export class HomePage {
 
   // cards$: Observable<Cards>;
-  cards : Array<Card>;
+  cards: Array<Card>;
   paginate: number = 1;
   mana: string | number = '*';
   maxLength: number = 30;
@@ -31,6 +28,7 @@ export class HomePage {
   urlAttribute: string = `&class=druid`;
   createDeck: boolean = false;
   skinCover:string;
+  subscriber: Subscription
 
   token:Token;
 
@@ -62,7 +60,6 @@ export class HomePage {
     window.addEventListener('orientationchange', () => {
       console.log(screen.orientation.type); // e.g. portrait
     });
-
   }
 
   async ionViewDidEnter(): Promise<void> {
@@ -255,33 +252,20 @@ export class HomePage {
     if(this.validate.page != ''){
       this.urlAttribute = this.urlAttribute+`&page=${this.validate.page}`
     }
-<<<<<<< HEAD
 
     const card = await this.homeService.getCardsFiltered(this.urlAttribute);
     card.pipe(take(1)).subscribe(
-      (res) => this.homeStore.emitCards(res)
+      (res) => {
+        this.homeStore.emitCards(res)
+      }
     );
-
-=======
-    console.log('asddsasad', this.urlAttribute)
-    this.homeService.getCardsFiltered(this.urlAttribute);
-      
-    //console.log('url: '+this.urlAttribute)
-    //console.log(this.validate)
     
-    // this.apiService.getCards(this.urlAttribute).pipe(
-    //   take(1),
-    //   map((res: Cards): Card[] => {
-    //     return res.cards;
-    //   }),
-    //   tap((res: Card[]) => {
-    //     console.log(res)
-    //     this.homeStore.emitCards(res)
-    //     //this.cards = res.cards
-    //   })        
-    // ).subscribe();
->>>>>>> 524333246a33c2ab7739867ab52f94ee85bc5063
   }
+
+  public getPageCards(index: number, item: number) {
+    if(!item) return null;
+    return index;
+  };
   
   saveDeck(): void {
 
