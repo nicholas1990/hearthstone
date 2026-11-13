@@ -41,7 +41,6 @@ export class ApiAuthenticationService {
     const userInfo = `https://eu.battle.net/oauth/userinfo`;
     const authorization = `Bearer ${token.access_token}`;
 
-    console.log('authorization ', authorization);
     const headers = new HttpHeaders()
       .append('Authorization', authorization)
       .append('Content-Type', 'application/x-www-form-urlencoded');

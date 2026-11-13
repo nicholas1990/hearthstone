@@ -58,13 +58,9 @@ export class LoginPage {
     const browser = this.iab.create(this.loginURL, '_blank');  // open in-app browser
 
     browser.on('loadstart').subscribe(async event => {
-      console.log("evento browser : ");
-      console.log(JSON.stringify(event));
       const url = event.url;
       const urlTrim = url.split('code=');
       this.code = urlTrim[1];
-      console.log("code: ");
-      console.log(this.code);
       if (this.code) {
         browser.close();
         const token = await this.authService.getAuthorization(this.code);
