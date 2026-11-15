@@ -3,7 +3,7 @@ import type { Card } from './models';
 
 const card = (id: string, over: Partial<Card> = {}): Card => ({
   id,
-  dbfId: 1,
+  dbfId: id.split('').reduce((n, ch) => n * 31 + ch.charCodeAt(0), 7),
   name: id,
   cost: 2,
   cardClass: 'MAGE',
@@ -43,9 +43,9 @@ describe('deck rules', () => {
   it('rimuove una copia alla volta e calcola la curva', () => {
     let d = addCard(addCard(newDeck('MAGE'), card('a', { cost: 9 })), card('a', { cost: 9 }));
     expect(manaCurve(d)[7]).toBe(2);
-    d = removeCard(d, 'a');
+    d = removeCard(d, card('a').dbfId);
     expect(deckCount(d)).toBe(1);
-    d = removeCard(d, 'a');
+    d = removeCard(d, card('a').dbfId);
     expect(d.entries).toHaveLength(0);
   });
 });

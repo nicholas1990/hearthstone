@@ -30,21 +30,21 @@
   </section>
 
   <ion-list lines="none">
-    @for (e of deck.entries; track e.card.id) {
+    @for (e of deck.entries; track e.card.dbfId) {
     <ion-item-sliding>
       <ion-item [class]="'rar-' + e.card.rarity.toLowerCase()">
         <span class="cost">{{ e.card.cost }}</span>
-        <img class="tile" [src]="tile(e.card.id)" alt="" loading="lazy" />
+        <img class="tile" [src]="tile(e.card)" alt="" loading="lazy" />
         <ion-label class="name">{{ e.card.name }}</ion-label>
         @if (e.count > 1) {
         <span class="qty">×{{ e.count }}</span>
         }
-        <ion-button fill="clear" slot="end" (click)="store.remove(e.card.id)" aria-label="Rimuovi una copia">
+        <ion-button fill="clear" slot="end" (click)="store.remove(e.card.dbfId)" aria-label="Rimuovi una copia">
           <ion-icon slot="icon-only" name="remove-circle-outline" />
         </ion-button>
       </ion-item>
       <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="store.remove(e.card.id)">Rimuovi</ion-item-option>
+        <ion-item-option color="danger" (click)="store.remove(e.card.dbfId)">Rimuovi</ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
     } @empty {

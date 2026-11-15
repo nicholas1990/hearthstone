@@ -30,13 +30,13 @@ export class DeckStore {
     return result;
   }
 
-  remove(cardId: string): void {
+  remove(dbfId: number): void {
     const deck = this.deck();
-    if (deck) this.set(removeCard(deck, cardId));
+    if (deck) this.set(removeCard(deck, dbfId));
   }
 
-  countOf(cardId: string): number {
-    return this.deck()?.entries.find((e) => e.card.id === cardId)?.count ?? 0;
+  countOf(dbfId: number): number {
+    return this.deck()?.entries.find((e) => e.card.dbfId === dbfId)?.count ?? 0;
   }
 
   private set(deck: Deck | null): void {

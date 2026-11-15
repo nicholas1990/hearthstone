@@ -10,24 +10,24 @@ export const maxCopies = (card: Card): number => (card.rarity === 'LEGENDARY' ? 
 export const canAdd = (deck: Deck, card: Card): AddResult => {
   if (card.cardClass !== 'NEUTRAL' && card.cardClass !== deck.heroClass) return 'wrong-class';
   if (deckCount(deck) >= DECK_SIZE) return 'full';
-  const entry = deck.entries.find((e) => e.card.id === card.id);
+  const entry = deck.entries.find((e) => e.card.dbfId === card.dbfId);
   if (entry && entry.count >= maxCopies(card)) return 'max-copies';
   return 'ok';
 };
 
 export const addCard = (deck: Deck, card: Card): Deck => {
   if (canAdd(deck, card) !== 'ok') return deck;
-  const found = deck.entries.some((e) => e.card.id === card.id);
+  const found = deck.entries.some((e) => e.card.dbfId === card.dbfId);
   const entries = found
-    ? deck.entries.map((e) => (e.card.id === card.id ? { ...e, count: e.count + 1 } : e))
+    ? deck.entries.map((e) => (e.card.dbfId === card.dbfId ? { ...e, count: e.count + 1 } : e))
     : [...deck.entries, { card, count: 1 }];
   return { ...deck, entries: sortEntries(entries) };
 };
 
-export const removeCard = (deck: Deck, cardId: string): Deck => ({
+export const removeCard = (deck: Deck, dbfId: number): Deck => ({
   ...deck,
   entries: deck.entries
-    .map((e) => (e.card.id === cardId ? { ...e, count: e.count - 1 } : e))
+    .map((e) => (e.card.dbfId === dbfId ? { ...e, count: e.count - 1 } : e))
     .filter((e) => e.count > 0),
 });
 

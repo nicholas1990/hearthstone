@@ -1,0 +1,31 @@
+{
+  "name": "hearthstone-server",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Proxy locale per l'API Blizzard: tiene il segreto fuori dall'app e restituisce le carte nel formato dell'app.",
+  "scripts": {
+    "build": "nest build",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@nestjs/common": "^12.1.3",
+    "@nestjs/config": "^12.0.1",
+    "@nestjs/core": "^12.1.3",
+    "@nestjs/platform-express": "^12.1.3",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^12.0.8",
+    "@nestjs/schematics": "^12.0.7",
+    "@nestjs/testing": "^12.1.3",
+    "@swc/core": "^1.16.18",
+    "@types/node": "^22.0.0",
+    "typescript": "^6.0.3",
+    "unplugin-swc": "^2.0.0",
+    "vitest": "^5.0.5"
+  }
+}

@@ -21,6 +21,7 @@ import { addIcons } from 'ionicons';
 import { addCircleOutline, removeCircleOutline, trashOutline } from 'ionicons/icons';
 
 import { DeckStore } from '../../core/deck.store';
+import type { Card } from '../../core/models';
 import { cardTile, CLASS_COLORS, CLASS_LABELS, DECK_SIZE, HERO_CLASSES } from '../../core/models';
 
 @Component({
@@ -62,8 +63,8 @@ export class DeckPage {
     addIcons({ addCircleOutline, removeCircleOutline, trashOutline });
   }
 
-  protected tile(id: string): string {
-    return cardTile(id);
+  protected tile(card: Card): string {
+    return cardTile(card);
   }
 
   protected async chooseClass(): Promise<void> {

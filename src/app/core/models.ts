@@ -54,6 +54,10 @@ export interface Card {
   cardClass: HeroClass | 'NEUTRAL';
   type: string;
   rarity: Rarity;
+  /** URL dell'immagine intera; se manca si usa quella di HearthstoneJSON. */
+  image?: string;
+  /** URL della miniatura per la lista del mazzo. */
+  tile?: string;
   text: string;
   attack?: number;
   health?: number;
@@ -72,6 +76,7 @@ export interface Deck {
 
 export const DECK_SIZE = 30;
 
-export const cardImage = (id: string): string => `https://art.hearthstonejson.com/v1/render/latest/itIT/256x/${id}.png`;
+export const cardImage = (card: Card): string =>
+  card.image ?? `https://art.hearthstonejson.com/v1/render/latest/itIT/256x/${card.id}.png`;
 
-export const cardTile = (id: string): string => `https://art.hearthstonejson.com/v1/tiles/${id}.webp`;
+export const cardTile = (card: Card): string => card.tile ?? `https://art.hearthstonejson.com/v1/tiles/${card.id}.webp`;

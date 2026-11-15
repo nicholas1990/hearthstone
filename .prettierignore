@@ -3,3 +3,6 @@
 # Gradle's build output.
 android/
 ios/
+
+# server ha il suo progetto
+server/

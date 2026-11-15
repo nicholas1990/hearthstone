@@ -37,7 +37,7 @@
   } @else {
   <p class="count">{{ filtered().length }} carte</p>
   <div class="grid">
-    @for (card of shown(); track card.id) {
+    @for (card of shown(); track card.dbfId) {
     <button
       class="card"
       [class.maxed]="copies(card) >= max(card)"

@@ -67,7 +67,7 @@ export class CardsPage implements OnInit {
   }
 
   protected image(card: Card): string {
-    return cardImage(card.id);
+    return cardImage(card);
   }
 
   protected search(ev: Event): void {
@@ -91,7 +91,7 @@ export class CardsPage implements OnInit {
   }
 
   protected copies(card: Card): number {
-    return this.deck.countOf(card.id);
+    return this.deck.countOf(card.dbfId);
   }
 
   protected max(card: Card): number {
