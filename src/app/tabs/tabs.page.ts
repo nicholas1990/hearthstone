@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { IonBadge, IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { albumsOutline, layersOutline } from 'ionicons/icons';
+import { albumsOutline, layersOutline, settingsOutline } from 'ionicons/icons';
 
 import { DeckStore } from '../core/deck.store';
 
@@ -22,6 +22,10 @@ import { DeckStore } from '../core/deck.store';
             <ion-badge [color]="deck.complete() ? 'success' : 'warning'">{{ deck.count() }}/30</ion-badge>
           }
         </ion-tab-button>
+        <ion-tab-button tab="settings">
+          <ion-icon name="settings-outline" />
+          <ion-label>Impostazioni</ion-label>
+        </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
   `,
@@ -29,6 +33,6 @@ import { DeckStore } from '../core/deck.store';
 export class TabsPage {
   protected readonly deck = inject(DeckStore);
   constructor() {
-    addIcons({ albumsOutline, layersOutline });
+    addIcons({ albumsOutline, layersOutline, settingsOutline });
   }
 }

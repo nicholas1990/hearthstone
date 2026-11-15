@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+  <ion-toolbar><ion-title>Impostazioni</ion-title></ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list [inset]="true">
+    <ion-list-header>Fonte delle carte</ion-list-header>
+    <ion-radio-group [value]="settings.provider()" (ionChange)="choose($event)">
+      @for (p of providers; track p[0]) {
+      <ion-item><ion-radio [value]="p[0]" labelPlacement="end" justify="start">{{ p[1] }}</ion-radio></ion-item>
+      }
+    </ion-radio-group>
+  </ion-list>
+
+  @if (settings.provider() === 'blizzard') {
+  <ion-list [inset]="true">
+    <ion-list-header>Server locale</ion-list-header>
+    <ion-item>
+      <ion-input
+        label="Indirizzo"
+        labelPlacement="stacked"
+        inputmode="url"
+        placeholder="http://192.168.1.10:3000"
+        [value]="settings.serverUrl()"
+        (ionChange)="setUrl($event)"
+      />
+    </ion-item>
+    <ion-note class="note">Sul telefono usa l'IP del Mac sulla stessa rete Wi-Fi, non localhost.</ion-note>
+  </ion-list>
+  }
+
+  <ion-list [inset]="true">
+    <ion-list-header>Stato</ion-list-header>
+    <ion-item lines="none">
+      <ion-label>
+        <h3>{{ cards.count() }} carte</h3>
+        @if (cards.updatedAt(); as t) {
+        <p>Aggiornate il {{ t | date: 'dd/MM/yyyy HH:mm' }}</p>
+        } @if (cards.stale()) {
+        <p class="warn">Aggiornamento non riuscito: stai usando le carte salvate.</p>
+        } @if (cards.error(); as e) {
+        <p class="warn">{{ e }}</p>
+        }
+      </ion-label>
+      <ion-button slot="end" fill="outline" [disabled]="cards.loading()" (click)="refresh()">
+        {{ cards.loading() ? 'Carico…' : 'Aggiorna ora' }}
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

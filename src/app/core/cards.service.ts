@@ -1,70 +1,59 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
-import type { Card, HeroClass } from './models';
-
-const URL = 'https://api.hearthstonejson.com/v1/latest/itIT/cards.collectible.json';
-const KEEP_TYPES = new Set(['MINION', 'SPELL', 'WEAPON', 'LOCATION']);
-
-interface RawCard {
-  id: string;
-  dbfId: number;
-  name: string;
-  cost?: number;
-  cardClass: string;
-  type: string;
-  rarity?: string;
-  text?: string;
-  attack?: number;
-  health?: number;
-  durability?: number;
-}
-
-export const mapCard = (raw: RawCard): Card => ({
-  id: raw.id,
-  dbfId: raw.dbfId,
-  name: raw.name,
-  cost: raw.cost ?? 0,
-  cardClass: raw.cardClass as HeroClass | 'NEUTRAL',
-  type: raw.type,
-  rarity: (raw.rarity ?? 'FREE') as Card['rarity'],
-  text: (raw.text ?? '')
-    .replace(/<\/?[a-z]+>/gi, '')
-    .replace(/\$|#/g, '')
-    .replace(/\[x\]/g, ''),
-  attack: raw.attack,
-  health: raw.health,
-  durability: raw.durability,
-});
-
-/** Le ristampe (stesso nome, classe, costo e tipo in set diversi) contano come una sola carta. */
-export const dedupe = (cards: Card[]): Card[] => {
-  const seen = new Map<string, Card>();
-  for (const c of cards) {
-    const key = `${c.name}|${c.cardClass}|${c.cost}|${c.type}`;
-    if (!seen.has(key)) seen.set(key, c);
-  }
-  return [...seen.values()];
-};
+import { readCache, writeCache } from './card-cache';
+import type { Card } from './models';
+import { BlizzardProvider } from './providers/blizzard.provider';
+import type { CardProvider } from './providers/card-provider';
+import { HearthstoneJsonProvider } from './providers/hearthstonejson.provider';
+import { SettingsStore } from './settings.store';
 
 @Injectable({ providedIn: 'root' })
 export class CardsService {
+  private readonly settings = inject(SettingsStore);
   private readonly _cards = signal<Card[]>([]);
+  private loadedFor = '';
+
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  /** true se si stanno mostrando le carte in cache perché l'aggiornamento è fallito. */
+  readonly stale = signal(false);
+  readonly updatedAt = signal<number | null>(null);
   readonly cards = this._cards.asReadonly();
   readonly count = computed(() => this._cards().length);
 
-  async load(): Promise<void> {
-    if (this._cards().length || this.loading()) return;
+  private provider(): CardProvider {
+    return this.settings.provider() === 'blizzard'
+      ? new BlizzardProvider(this.settings.serverUrl())
+      : new HearthstoneJsonProvider();
+  }
+
+  /** Mostra subito la cache (se c'è) e poi aggiorna dalla rete. `force` ricarica anche se già caricato. */
+  async load(force = false): Promise<void> {
+    const provider = this.provider();
+    const key = `${provider.id}|${this.settings.serverUrl()}`;
+    if (this.loading() || (!force && this.loadedFor === key && this._cards().length)) return;
     this.loading.set(true);
     this.error.set(null);
+    this.stale.set(false);
+
+    const cached = await readCache(provider.id);
+    this._cards.set(cached?.cards ?? []);
+    this.updatedAt.set(cached?.savedAt ?? null);
+
     try {
-      const res = await fetch(URL);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const raw = (await res.json()) as RawCard[];
-      this._cards.set(dedupe(raw.filter((c) => KEEP_TYPES.has(c.type)).map(mapCard)));
+      const cards = await provider.load();
+      this._cards.set(cards);
+      this.updatedAt.set(Date.now());
+      this.loadedFor = key;
+      void writeCache(provider.id, cards);
     } catch (e) {
-      this.error.set(`Impossibile caricare le carte (${(e as Error).message}).`);
+      const reason = (e as Error).message;
+      if (cached) {
+        this.stale.set(true);
+        this.loadedFor = key;
+      } else {
+        this.error.set(`Impossibile caricare le carte (${reason}).`);
+      }
     } finally {
       this.loading.set(false);
     }
