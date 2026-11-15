@@ -9,9 +9,6 @@ describe('AppComponent', () => {
       imports: [AppComponent],
       providers: [provideRouter([])],
     }).compileComponents();
-
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+    expect(TestBed.createComponent(AppComponent).componentInstance).toBeTruthy();
   });
 });

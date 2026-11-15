@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Carte
+      <span class="cls" [style.--c]="classColor()">{{ classLabel() }}</span>
+    </ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Cerca per nome o testo" [debounce]="200" (ionInput)="search($event)" />
+  </ion-toolbar>
+  <ion-toolbar class="filters">
+    <div class="chips">
+      <ion-chip [outline]="classFilter() !== 'ALL'" (click)="setClass('ALL')">Tutte</ion-chip>
+      @if (deck.deck()) {
+      <ion-chip [outline]="classFilter() !== 'CLASS'" (click)="setClass('CLASS')">Di classe</ion-chip>
+      }
+      <ion-chip [outline]="classFilter() !== 'NEUTRAL'" (click)="setClass('NEUTRAL')">Neutrali</ion-chip>
+      <span class="sep"></span>
+      @for (m of mana; track m) {
+      <ion-chip class="mana" [outline]="manaFilter() !== m" (click)="setMana(m)">{{ m === 7 ? '7+' : m }}</ion-chip>
+      }
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollEvents]="true" (ionScroll)="more($event)">
+  @if (cardsService.loading()) {
+  <div class="state">
+    <ion-spinner name="crescent" />
+    <p>Carico le carte…</p>
+  </div>
+  } @else if (cardsService.error()) {
+  <div class="state">
+    <p>{{ cardsService.error() }}</p>
+    <ion-chip (click)="cardsService.load()">Riprova</ion-chip>
+  </div>
+  } @else {
+  <p class="count">{{ filtered().length }} carte</p>
+  <div class="grid">
+    @for (card of shown(); track card.id) {
+    <button
+      class="card"
+      [class.maxed]="copies(card) >= max(card)"
+      (click)="add(card)"
+      [attr.aria-label]="'Aggiungi ' + card.name"
+    >
+      <img [src]="image(card)" [alt]="card.name" loading="lazy" decoding="async" />
+      @if (copies(card) > 0) {
+      <ion-badge class="copies" color="warning">×{{ copies(card) }}</ion-badge>
+      }
+    </button>
+    } @empty {
+    <p class="empty">Nessuna carta con questi filtri.</p>
+    }
+  </div>
+  }
+</ion-content>
