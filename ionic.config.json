@@ -1,7 +1,7 @@
 {
-  "name": "h",
+  "name": "hs",
   "integrations": {
-    "cordova": {}
+    "capacitor": {}
   },
-  "type": "angular"
+  "type": "angular-standalone"
 }
