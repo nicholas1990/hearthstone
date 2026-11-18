@@ -19,7 +19,7 @@ import { DeckStore } from '../core/deck.store';
           <ion-icon name="layers-outline" />
           <ion-label>Mazzo</ion-label>
           @if (deck.deck()) {
-            <ion-badge [color]="deck.complete() ? 'success' : 'warning'">{{ deck.count() }}/30</ion-badge>
+            <ion-badge [color]="deck.complete() ? 'success' : 'warning'">{{ deck.count() }}</ion-badge>
           }
         </ion-tab-button>
         <ion-tab-button tab="settings">
@@ -28,6 +28,17 @@ import { DeckStore } from '../core/deck.store';
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
+  `,
+  styles: `
+    ion-badge {
+      position: absolute;
+      top: 2px;
+      inset-inline-start: calc(50% + 12px);
+      min-width: 20px;
+      padding: 2px 5px;
+      font-size: 11px;
+      line-height: 14px;
+    }
   `,
 })
 export class TabsPage {

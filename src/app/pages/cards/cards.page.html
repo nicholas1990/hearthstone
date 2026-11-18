@@ -12,7 +12,7 @@
     <div class="chips">
       <ion-chip [outline]="classFilter() !== 'ALL'" (click)="setClass('ALL')">Tutte</ion-chip>
       @if (deck.deck()) {
-      <ion-chip [outline]="classFilter() !== 'CLASS'" (click)="setClass('CLASS')">Di classe</ion-chip>
+      <ion-chip [outline]="classFilter() !== 'CLASS'" (click)="setClass('CLASS')">Classe</ion-chip>
       }
       <ion-chip [outline]="classFilter() !== 'NEUTRAL'" (click)="setClass('NEUTRAL')">Neutrali</ion-chip>
       <span class="sep"></span>
@@ -28,7 +28,7 @@
         (click)="setFormat('wild')"
         >Wild</ion-chip
       >
-      <span class="sep"></span>
+      <span class="sep break"></span>
       @for (m of mana; track m) {
       <ion-chip class="mana" [outline]="manaFilter() !== m" (click)="setMana(m)">{{ m === 7 ? '7+' : m }}</ion-chip>
       }
