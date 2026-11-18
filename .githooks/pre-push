@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Prima di ogni push gira la CI locale. Saltabile in emergenza con: git push --no-verify
+exec "$(git rev-parse --show-toplevel)/scripts/ci.sh"
