@@ -1,23 +1,48 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Mazzo</ion-title>
-    @if (store.deck()) {
+    <ion-title>Mazzi</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="danger" (click)="reset()" aria-label="Elimina mazzo"
-        ><ion-icon slot="icon-only" name="trash-outline"
-      /></ion-button>
+      @if (store.deck()) {
+      <ion-button (click)="menu()" aria-label="Opzioni del mazzo">
+        <ion-icon slot="icon-only" name="ellipsis-horizontal" />
+      </ion-button>
+      }
+      <ion-button (click)="newDeck()" aria-label="Nuovo mazzo">
+        <ion-icon slot="icon-only" name="add-circle-outline" />
+      </ion-button>
     </ion-buttons>
-    }
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   @if (store.deck(); as deck) {
+  <div class="decks" role="tablist">
+    @for (d of store.decks(); track d.id) {
+    <button
+      class="pill"
+      role="tab"
+      [class.active]="d.id === deck.id"
+      [attr.aria-selected]="d.id === deck.id"
+      (click)="store.select(d.id)"
+    >
+      <span class="dot" [style.background]="classColor(d.heroClass)"></span>
+      {{ d.name }}
+      <small>{{ total(d) }}/{{ size }}</small>
+    </button>
+    }
+  </div>
+
   <section class="summary" [style.--c]="color()">
     <div class="top">
-      <strong>{{ label() }}</strong>
+      <div>
+        <strong>{{ label() }}</strong>
+        <span class="fmt">{{ formatLabels[deck.format] }}</span>
+      </div>
       <span class="count" [class.done]="store.complete()">{{ store.count() }}/{{ size }}</span>
     </div>
+    @if (illegal() > 0) {
+    <p class="warn">{{ illegal() }} carte non sono più ammesse in questo formato.</p>
+    }
     <div class="curve" aria-label="Curva di mana">
       @for (b of bars(); track $index) {
       <div class="col">
@@ -54,8 +79,8 @@
   } @else {
   <div class="empty">
     <h2>Nessun mazzo</h2>
-    <p>Scegli una classe e componi 30 carte (max 2 copie, 1 per le leggendarie).</p>
-    <ion-button (click)="chooseClass()"><ion-icon slot="start" name="add-circle-outline" />Nuovo mazzo</ion-button>
+    <p>Scegli classe e formato e componi 30 carte (max 2 copie, 1 per le leggendarie).</p>
+    <ion-button (click)="newDeck()"><ion-icon slot="start" name="add-circle-outline" />Nuovo mazzo</ion-button>
   </div>
   }
 </ion-content>

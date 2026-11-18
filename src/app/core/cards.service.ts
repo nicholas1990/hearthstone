@@ -38,7 +38,9 @@ export class CardsService {
     this.error.set(null);
     this.stale.set(false);
 
-    const cached = await readCache(provider.id);
+    const stored = await readCache(provider.id);
+    // le cache salvate prima del flag Standard non servono più
+    const cached = stored && typeof stored.cards[0]?.standard === 'boolean' ? stored : null;
     this._cards.set(cached?.cards ?? []);
     this.updatedAt.set(cached?.savedAt ?? null);
 

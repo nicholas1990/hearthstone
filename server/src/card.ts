@@ -7,6 +7,8 @@ export interface Card {
   cardClass: string;
   type: string;
   rarity: string;
+  set?: string;
+  standard: boolean;
   image?: string;
   tile?: string;
   text: string;

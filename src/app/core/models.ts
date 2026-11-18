@@ -54,6 +54,10 @@ export interface Card {
   cardClass: HeroClass | 'NEUTRAL';
   type: string;
   rarity: Rarity;
+  /** Codice del set di espansione, se noto. */
+  set?: string;
+  /** true se la carta è giocabile nel formato Standard. */
+  standard: boolean;
   /** URL dell'immagine intera; se manca si usa quella di HearthstoneJSON. */
   image?: string;
   /** URL della miniatura per la lista del mazzo. */
@@ -69,9 +73,17 @@ export interface DeckEntry {
   count: number;
 }
 
+export type Format = 'standard' | 'wild';
+
+export const FORMAT_LABELS: Record<Format, string> = { standard: 'Standard', wild: 'Wild' };
+
 export interface Deck {
+  id: string;
+  name: string;
   heroClass: HeroClass;
+  format: Format;
   entries: DeckEntry[];
+  updatedAt: number;
 }
 
 export const DECK_SIZE = 30;

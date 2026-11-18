@@ -11,6 +11,7 @@ export interface BlizzardCard {
   classId: number;
   multiClassIds?: number[];
   cardTypeId: number;
+  cardSetId?: number;
   rarityId?: number;
   manaCost?: number;
   name: string;
@@ -26,6 +27,9 @@ export interface Metadata {
   classes: MetaEntry[];
   types: MetaEntry[];
   rarities: MetaEntry[];
+  sets: MetaEntry[];
+  /** Slug dei set giocabili in Standard (dal gruppo "standard" di Blizzard). */
+  standardSets: string[];
 }
 
 const KEEP_TYPES = new Set(['MINION', 'SPELL', 'WEAPON', 'LOCATION']);
@@ -48,6 +52,7 @@ export const mapCard = (c: BlizzardCard, meta: Metadata): Card | null => {
   const type = lookup(meta.types, c.cardTypeId);
   if (!KEEP_TYPES.has(type)) return null;
   const cardClass = lookup(meta.classes, c.classId) || 'NEUTRAL';
+  const setSlug = meta.sets.find((s) => s.id === c.cardSetId)?.slug ?? '';
   return {
     // con Blizzard l'id numerico coincide con il dbfId di HearthstoneJSON
     id: String(c.id),
@@ -57,6 +62,8 @@ export const mapCard = (c: BlizzardCard, meta: Metadata): Card | null => {
     cardClass,
     type,
     rarity: lookup(meta.rarities, c.rarityId) || 'FREE',
+    set: setSlug || undefined,
+    standard: meta.standardSets.includes(setSlug),
     image: c.image,
     tile: c.cropImage,
     text: cleanText(c.text),
@@ -67,16 +74,21 @@ export const mapCard = (c: BlizzardCard, meta: Metadata): Card | null => {
 };
 
 export const mapCards = (cards: BlizzardCard[], meta: Metadata): Card[] => {
-  const seen = new Set<string>();
+  const at = new Map<string, number>();
   const out: Card[] = [];
   for (const raw of cards) {
     const card = mapCard(raw, meta);
     if (!card) continue;
-    // le ristampe (stesso nome, classe, costo e tipo) contano come una sola carta, come nell'app
+    // le ristampe (stesso nome, classe, costo e tipo) contano come una sola carta, come nell'app;
+    // si tiene la versione Standard
     const key = `${card.name}|${card.cardClass}|${card.cost}|${card.type}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(card);
+    const i = at.get(key);
+    if (i === undefined) {
+      at.set(key, out.length);
+      out.push(card);
+    } else if (card.standard && !out[i].standard) {
+      out[i] = card;
+    }
   }
   return out;
 };

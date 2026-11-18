@@ -20,4 +20,12 @@ describe('hearthstonejson provider', () => {
     const b = mapCard({ id: 'B', dbfId: 2, name: 'Fuoco Fatuo', cost: 0, cardClass: 'NEUTRAL', type: 'MINION' });
     expect(dedupe([a, b])).toEqual([a]);
   });
+
+  it('segna Standard i set in rotazione e tiene la versione Standard delle ristampe', () => {
+    const old = mapCard({ id: 'A', dbfId: 1, name: 'R', cost: 1, cardClass: 'NEUTRAL', type: 'MINION', set: 'LEGACY' });
+    const cur = mapCard({ id: 'B', dbfId: 2, name: 'R', cost: 1, cardClass: 'NEUTRAL', type: 'MINION', set: 'CORE' });
+    expect(old.standard).toBe(false);
+    expect(cur.standard).toBe(true);
+    expect(dedupe([old, cur])).toEqual([cur]);
+  });
 });

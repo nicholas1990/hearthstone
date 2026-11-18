@@ -82,12 +82,16 @@ export class BlizzardService {
   }
 
   private async metadata(locale: string): Promise<Metadata> {
-    const [classes, types, rarities] = await Promise.all(
-      (['classes', 'types', 'rarities'] as const).map((k) =>
+    const [classes, types, rarities, sets] = await Promise.all(
+      (['classes', 'types', 'rarities', 'sets'] as const).map((k) =>
         this.get<MetaEntry[]>(`/hearthstone/metadata/${k}`, { locale }),
       ),
     );
-    return { classes, types, rarities };
+    const groups = await this.get<{ slug: string; cardSets?: string[] }[]>('/hearthstone/metadata/setGroups', {
+      locale,
+    });
+    const standardSets = groups.find((g) => g.slug === 'standard')?.cardSets ?? [];
+    return { classes, types, rarities, sets, standardSets };
   }
 
   private async allCards(locale: string): Promise<BlizzardCard[]> {

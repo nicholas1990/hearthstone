@@ -16,6 +16,19 @@
       }
       <ion-chip [outline]="classFilter() !== 'NEUTRAL'" (click)="setClass('NEUTRAL')">Neutrali</ion-chip>
       <span class="sep"></span>
+      <ion-chip
+        [outline]="format() !== 'standard'"
+        [disabled]="!!deck.deck() && format() !== 'standard'"
+        (click)="setFormat('standard')"
+        >Standard</ion-chip
+      >
+      <ion-chip
+        [outline]="format() !== 'wild'"
+        [disabled]="!!deck.deck() && format() !== 'wild'"
+        (click)="setFormat('wild')"
+        >Wild</ion-chip
+      >
+      <span class="sep"></span>
       @for (m of mana; track m) {
       <ion-chip class="mana" [outline]="manaFilter() !== m" (click)="setMana(m)">{{ m === 7 ? '7+' : m }}</ion-chip>
       }
