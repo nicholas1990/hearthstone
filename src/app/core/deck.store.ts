@@ -31,6 +31,11 @@ export class DeckStore {
     return deck;
   }
 
+  /** Aggiunge un mazzo già pronto (es. importato) e lo seleziona. */
+  addDeck(deck: Deck): void {
+    this.save([...this.decks(), deck], deck.id);
+  }
+
   select(id: string): void {
     if (this.decks().some((d) => d.id === id)) this.save(this.decks(), id);
   }
