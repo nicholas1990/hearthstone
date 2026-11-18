@@ -7,6 +7,8 @@ import type { CardProvider } from './providers/card-provider';
 import { HearthstoneJsonProvider } from './providers/hearthstonejson.provider';
 import { SettingsStore } from './settings.store';
 
+const MAX_AGE_MS = 12 * 3_600_000;
+
 @Injectable({ providedIn: 'root' })
 export class CardsService {
   private readonly settings = inject(SettingsStore);
@@ -39,6 +41,13 @@ export class CardsService {
     const cached = await readCache(provider.id);
     this._cards.set(cached?.cards ?? []);
     this.updatedAt.set(cached?.savedAt ?? null);
+
+    // cache recente: niente scaricamento (3 MB) a ogni avvio
+    if (cached && !force && Date.now() - cached.savedAt < MAX_AGE_MS) {
+      this.loadedFor = key;
+      this.loading.set(false);
+      return;
+    }
 
     try {
       const cards = await provider.load();

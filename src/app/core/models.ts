@@ -79,4 +79,5 @@ export const DECK_SIZE = 30;
 export const cardImage = (card: Card): string =>
   card.image ?? `https://art.hearthstonejson.com/v1/render/latest/itIT/256x/${card.id}.png`;
 
-export const cardTile = (card: Card): string => card.tile ?? `https://art.hearthstonejson.com/v1/tiles/${card.id}.webp`;
+export const cardTile = (card: Card): string =>
+  card.tile ?? (card.image ? card.image : `https://art.hearthstonejson.com/v1/tiles/${card.id}.webp`);

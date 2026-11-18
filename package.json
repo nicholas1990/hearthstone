@@ -16,7 +16,10 @@
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "ng test --no-watch",
     "test:unit:watch": "ng test --watch",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "cap:sync": "ng build && cap sync",
+    "cap:android": "npm run cap:sync && cap open android",
+    "cap:ios": "npm run cap:sync && cap open ios"
   },
   "private": true,
   "dependencies": {
@@ -26,9 +29,11 @@
     "@angular/forms": "22.2.5",
     "@angular/platform-browser": "22.2.5",
     "@angular/router": "22.2.5",
+    "@capacitor/android": "^8.6.2",
     "@capacitor/app": "8.1.2",
     "@capacitor/core": "8.6.2",
     "@capacitor/haptics": "8.0.2",
+    "@capacitor/ios": "^8.6.2",
     "@capacitor/keyboard": "8.0.6",
     "@capacitor/status-bar": "8.0.4",
     "@ionic/angular": "^9.0.0",
